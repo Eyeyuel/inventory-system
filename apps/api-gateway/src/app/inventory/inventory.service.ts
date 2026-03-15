@@ -1,3 +1,4 @@
+import { INVENTORY_CMD } from "@inventory-system/constants";
 import { Inject, Injectable } from "@nestjs/common";
 // import { CreateInventoryDto } from "./dto/create-inventory.dto";
 // import { UpdateInventoryDto } from "./dto/update-inventory.dto";
@@ -13,7 +14,7 @@ export class InventoryService {
   // }
 
   findAll() {
-    return this.inventoryClient.send({ cmd: "get_inventory" }, {});
+    return this.inventoryClient.send(INVENTORY_CMD.FIND, {});
     // return "This action returns all inventory fom api-gateway";
   }
 
