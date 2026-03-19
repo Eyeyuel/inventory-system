@@ -18,5 +18,13 @@
     "eslint.config.js",
     "eslint.config.cjs",
     "eslint.config.mjs"
+  ],
+  "references": [
+    {
+      "path": "../../shared/dto/tsconfig.lib.json"
+    },
+    {
+      "path": "../../shared/constants/tsconfig.lib.json"
+    }
   ]
 }

@@ -1,27 +1,53 @@
-import { Injectable } from "@nestjs/common";
-import { CreateAuthDto } from "./dto/create-auth.dto";
-import { UpdateAuthDto } from "./dto/update-auth.dto";
+import { Injectable, UnauthorizedException } from "@nestjs/common";
+import { SignInUserDto, SignUpDto } from "@inventory-system/dto";
+import { UsersService } from "../users/users.service";
+import { RpcException } from "@nestjs/microservices";
+import { JwtService } from "@nestjs/jwt";
+import bcrypt from "bcrypt";
+import { User } from "./entities/user.entity";
 
 @Injectable()
 export class AuthService {
-  create(createAuthDto: CreateAuthDto) {
-    return "This action adds a new auth";
+  constructor(
+    private userService: UsersService,
+    private jwtService: JwtService,
+  ) {}
+
+  private generateToken(user: Partial<User>): string {
+    const payload = { sub: user.id, email: user.email };
+    return this.jwtService.sign(payload);
   }
 
-  findAll() {
-    return `This action returns all auth`;
+  async signIn(signInUserDto: SignInUserDto) {
+    const user = await this.userService.findone(signInUserDto.email);
+
+    if (!user) {
+      // Throw 401 – same message as wrong password to avoid email enumeration
+      throw new RpcException({
+        statusCode: 401,
+        message: "Invalid credentials",
+      });
+    }
+
+    // Compare password
+    const isMatch = await bcrypt.compare(signInUserDto.password, user.password);
+    if (!isMatch) {
+      throw new RpcException({
+        statusCode: 401,
+        message: "Invalid credentials",
+      });
+    }
+
+    const { password, ...result } = user;
+
+    const token = this.generateToken(user);
+
+    return { result, access_token: token };
   }
 
-  findOne(id: number) {
-    // return `This action returns a #${id} auth`;
-    return `ggggggggggggggggggggg`;
-  }
-
-  update(id: number, updateAuthDto: UpdateAuthDto) {
-    return `This action updates a #${id} auth`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} auth`;
+  async signUp(signUpDto: SignUpDto) {
+    const User = await this.userService.create(signUpDto);
+    const token = this.generateToken(User);
+    return { User, access_token: token };
   }
 }

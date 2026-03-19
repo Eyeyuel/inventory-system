@@ -1,9 +1,18 @@
 export const USER_CMD = {
-  FIND: { cmd: "find_all_users" },
-  CREATE: { cmd: "create_user" },
-  FIND_ONE: { cmd: "find_user" },
-  UPDATE: { cmd: "update_user" },
-  DELETE: { cmd: "delete_user" },
+  LOGIN: { cmd: "login_user" },
+  SIGNUP: { cmd: "signup_user" },
+  // CREATE: { cmd: "create_user" },
+  // FIND_ONE: { cmd: "find_user" },
+  // UPDATE: { cmd: "update_user" },
+  // DELETE: { cmd: "delete_user" },
+};
+
+export const PRODUCT_CMD = {
+  FIND: { cmd: "find_all_products" },
+  CREATE: { cmd: "create_product" },
+  FIND_ONE: { cmd: "find_product" },
+  UPDATE: { cmd: "update_product" },
+  DELETE: { cmd: "delete_product" },
 };
 
 export const INVENTORY_CMD = {

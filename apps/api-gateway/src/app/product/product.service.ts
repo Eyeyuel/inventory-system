@@ -1,7 +1,6 @@
 import { Inject, Injectable } from "@nestjs/common";
-import { CreateProductDto } from "./dto/create-product.dto";
-import { UpdateProductDto } from "./dto/update-product.dto";
 import { ClientProxy } from "@nestjs/microservices";
+import { PRODUCT_CMD } from "@inventory-system/constants";
 
 @Injectable()
 export class ProductService {
@@ -14,7 +13,7 @@ export class ProductService {
   // }
 
   findAll() {
-    return this.productClient.send({ cmd: "get_products" }, {});
+    return this.productClient.send(PRODUCT_CMD.FIND, {});
   }
 
   // findOne(id: number) {
