@@ -4,7 +4,7 @@ import { AppService } from "./app.service";
 import { AuthModule } from "./auth/auth.module";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { UsersModule } from './users/users.module';
+import { UsersModule } from "./users/users.module";
 
 @Module({
   imports: [
@@ -14,11 +14,11 @@ import { UsersModule } from './users/users.module';
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
         type: "postgres",
-        host: config.get<string>("DB_HOST") ?? "localhost",
-        port: +(config.get<string>("DB_PORT") ?? "5432"),
-        username: config.get<string>("DB_USERNAME") ?? "postgres",
-        password: config.get<string>("DB_PASSWORD") ?? "1234",
-        database: config.get<string>("DB_NAME") ?? "user_db",
+        host: config.get<string>("POSTGRES_HOST") ?? "localhost",
+        port: +(config.get<string>("POSTGRES_PORT") ?? "5432"),
+        username: config.get<string>("POSTGRES_USER") ?? "postgres",
+        password: config.get<string>("POSTGRES_PASSWORD") ?? "1234",
+        database: config.get<string>("POSTGRES_DATABASE") ?? "user_db",
         // entities: [__dirname + "/**/*.entity{.ts,.js}"],
         autoLoadEntities: true,
         synchronize: true,

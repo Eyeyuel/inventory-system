@@ -6,6 +6,7 @@ import { InventoryModule } from "./inventory/inventory.module";
 import { ProductModule } from "./product/product.module";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { JwtModule } from "@nestjs/jwt";
+import { CategoryModule } from "./category/category.module";
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { JwtModule } from "@nestjs/jwt";
     UsersModule,
     InventoryModule,
     ProductModule,
+    CategoryModule,
   ],
   controllers: [AppController],
   providers: [AppService],

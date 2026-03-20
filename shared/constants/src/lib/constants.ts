@@ -15,6 +15,14 @@ export const PRODUCT_CMD = {
   DELETE: { cmd: "delete_product" },
 };
 
+export const CATEGORY_CMD = {
+  FIND: { cmd: "find_all_categories" },
+  CREATE: { cmd: "create_category" },
+  FIND_ONE: { cmd: "find_category" },
+  UPDATE: { cmd: "update_category" },
+  DELETE: { cmd: "delete_category" },
+};
+
 export const INVENTORY_CMD = {
   FIND: { cmd: "find_all_inventories" },
   CREATE: { cmd: "create_inventory" },
