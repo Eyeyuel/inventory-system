@@ -17,7 +17,7 @@ import { TypeOrmModule } from "@nestjs/typeorm";
           configService.get<string>("POSTGRES_DATABASE") ?? "product_db",
         // entities: ['dist/**/*.entity.js'],
         synchronize: true,
-        autholoadEntities: true,
+        autoLoadEntities: true,
       }),
     }),
   ],

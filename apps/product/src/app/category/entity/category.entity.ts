@@ -8,7 +8,7 @@ import {
 } from "typeorm";
 
 @Entity()
-export class Product {
+export class Category {
   @PrimaryGeneratedColumn()
   id!: number;
 
@@ -19,39 +19,14 @@ export class Product {
   name!: string;
 
   @Column({
-    nullable: true,
-  })
-  description?: string;
-
-  @Column({
-    nullable: false,
-  })
-  unitOfMeasurment!: string;
-
-  @Column({
-    nullable: false,
-  })
-  costPrice!: number;
-
-  @Column({
-    nullable: false,
-  })
-  sellingPrice!: number;
-
-  @Column({
-    nullable: false,
-  })
-  quantity!: number;
-
-  @Column({
-    nullable: false,
-  })
-  categoryId!: number;
-
-  @Column({
     nullable: false,
   })
   userId!: number;
+
+  @Column({
+    nullable: false,
+  })
+  storeId!: number;
 
   @CreateDateColumn()
   createdAt!: Date;
@@ -60,5 +35,5 @@ export class Product {
   updatedAt!: Date;
 
   @DeleteDateColumn()
-  deltedAt!: Date;
+  deletedAt!: Date;
 }

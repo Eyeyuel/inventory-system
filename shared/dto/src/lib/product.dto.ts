@@ -1,4 +1,10 @@
-import { IsNotEmpty, IsOptional, IsString, MaxLength } from "class-validator";
+import {
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+  MaxLength,
+} from "class-validator";
 
 export class CreateProductDto {
   @IsNotEmpty()
@@ -15,18 +21,22 @@ export class CreateProductDto {
   unitOfMeasurment!: string;
 
   @IsNotEmpty()
-  @IsString()
+  @IsNumber()
   costPrice!: number;
 
   @IsNotEmpty()
-  @IsString()
+  @IsNumber()
   sellingPrice!: number;
 
   @IsNotEmpty()
-  @IsString()
+  @IsNumber()
+  quantity!: number;
+
+  @IsNotEmpty()
+  @IsNumber()
   categoryId!: number;
 
-  @IsOptional()
-  @IsString()
-  supplierId!: number;
+  // @IsNotEmpty()
+  // @IsNumber()
+  // userId!: number;
 }

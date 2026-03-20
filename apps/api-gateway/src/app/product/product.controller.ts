@@ -1,16 +1,18 @@
-import { Controller, Get, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, Post, Req, UseGuards } from "@nestjs/common";
 import { ProductService } from "./product.service";
 import { AuthGuard } from "../guards/auth.guard";
+import { CreateProductDto } from "@inventory-system/dto";
 
 @UseGuards(AuthGuard)
 @Controller("product")
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
-  // @Post()
-  // create(@Body() createProductDto: CreateProductDto) {
-  //   return this.productService.create(createProductDto);
-  // }
+  @Post()
+  async createProduct(@Body() createProductDto: CreateProductDto, @Req() req) {
+    const userId = req.user.sub;
+    return this.productService.create({...createProductDto, userId});
+  }
 
   @Get()
   findAll() {
