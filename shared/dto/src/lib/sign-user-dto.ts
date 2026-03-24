@@ -1,4 +1,5 @@
 import { IsEmail, IsNotEmpty, IsOptional, IsString } from "class-validator";
+import { CreateProfileDto } from "./profile.dto";
 
 export class SignInUserDto {
   @IsEmail()
@@ -24,4 +25,7 @@ export class SignUpDto {
   @IsNotEmpty()
   @IsString()
   password!: string;
+
+  @IsOptional()
+  profile?: CreateProfileDto;
 }

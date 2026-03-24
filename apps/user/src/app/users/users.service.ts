@@ -33,6 +33,10 @@ export class UsersService {
       const saltRounds = 10;
       const hashedPassword = await bcrypt.hash(user.password, saltRounds);
 
+      // Set default values for proile obj
+      user.profile = user.profile ?? {};
+      user.profile.firstName = user.first_name ?? "";
+
       // Create a new user object with hashed password
       const userToCreate = {
         ...user,

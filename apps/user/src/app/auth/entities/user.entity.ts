@@ -4,9 +4,11 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
+import { Profile } from "../../profile/entities/profile.entity";
 
 @Entity()
 export class User {
@@ -33,6 +35,9 @@ export class User {
     nullable: false,
   })
   password!: string;
+
+  @OneToOne(() => Profile, (profile) => profile.user, { cascade: ["insert"] })
+  profile?: Profile;
 
   // @Column()
   // role!:string;
