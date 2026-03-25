@@ -1,6 +1,15 @@
-import { Controller, Post, Body, HttpStatus, HttpCode } from "@nestjs/common";
+import {
+  Controller,
+  Post,
+  Body,
+  HttpStatus,
+  HttpCode,
+  Res,
+} from "@nestjs/common";
+import type { Response } from "express";
 import { UsersService } from "./users.service";
 import { SignInUserDto, SignUpDto } from "@inventory-system/dto";
+import { firstValueFrom } from "rxjs";
 
 @Controller("users")
 export class UsersController {
@@ -8,8 +17,24 @@ export class UsersController {
 
   @HttpCode(HttpStatus.OK)
   @Post("login")
-  create(@Body() signInUserDto: SignInUserDto) {
-    return this.usersService.login(signInUserDto);
+  async create(
+    @Body() signInUserDto: SignInUserDto,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const response = await firstValueFrom(
+      this.usersService.login(signInUserDto),
+    );
+
+    const token = response.access_token;
+    res.cookie("access_token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      // expires: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000), // 1 day
+      maxAge: 60 * 60 * 1000, // 1 hour
+    });
+
+    return response.result;
   }
 
   @HttpCode(HttpStatus.OK)

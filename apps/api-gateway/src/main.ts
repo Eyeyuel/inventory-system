@@ -9,6 +9,7 @@ import { AppModule } from "./app/app.module";
 import { ConfigService } from "@nestjs/config";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import { RpcExceptionFilter } from "./app/common/filters/rpc-exception.filters";
+import cookieParser from "cookie-parser";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -16,6 +17,7 @@ async function bootstrap() {
   const globalPrefix = "api";
   app.setGlobalPrefix(globalPrefix);
   app.useGlobalFilters(new RpcExceptionFilter());
+  app.use(cookieParser());
 
   const configService = app.get(ConfigService);
   // const port = process.env.PORT || 3001;

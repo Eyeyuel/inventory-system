@@ -14,9 +14,9 @@ export class UsersService {
     @Inject("USERS_SERVICE") private readonly usersClient: ClientProxy,
   ) {}
 
-  async login(signInUserDto: SignInUserDto) {
+  login(signInUserDto: SignInUserDto) {
     try {
-      const user = await this.usersClient.send(USER_CMD.LOGIN, signInUserDto);
+      const user = this.usersClient.send(USER_CMD.LOGIN, signInUserDto);
 
       return user;
     } catch (error) {
