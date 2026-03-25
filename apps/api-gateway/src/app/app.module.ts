@@ -7,6 +7,7 @@ import { ProductModule } from "./product/product.module";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { JwtModule } from "@nestjs/jwt";
 import { CategoryModule } from "./category/category.module";
+import { ProfileModule } from './profile/profile.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { CategoryModule } from "./category/category.module";
     InventoryModule,
     ProductModule,
     CategoryModule,
+    ProfileModule,
   ],
   controllers: [AppController],
   providers: [AppService],

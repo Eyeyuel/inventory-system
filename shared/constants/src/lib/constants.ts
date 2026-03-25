@@ -6,6 +6,10 @@ export const USER_CMD = {
   // UPDATE: { cmd: "update_user" },
   // DELETE: { cmd: "delete_user" },
 };
+export const PROFILE_CMD = {
+  UPDATE: { cmd: "update_profile" },
+  GET: { cmd: "get_profile" },
+};
 
 export const PRODUCT_CMD = {
   FIND: { cmd: "find_all_products" },

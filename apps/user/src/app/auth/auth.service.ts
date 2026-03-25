@@ -18,7 +18,9 @@ export class AuthService {
     return this.jwtService.sign(payload);
   }
 
-  async signIn(signInUserDto: SignInUserDto) {
+  async signIn(
+    signInUserDto: SignInUserDto,
+  ): Promise<{ access_token: string; result: Partial<User> }> {
     const user = await this.userService.findone(signInUserDto.email);
 
     if (!user) {
