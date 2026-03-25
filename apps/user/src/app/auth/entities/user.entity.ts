@@ -1,4 +1,4 @@
-/* eslint-disable*/
+
 import {
   Column,
   CreateDateColumn,
@@ -12,8 +12,8 @@ import { Profile } from "../../profile/entities/profile.entity";
 
 @Entity()
 export class User {
-  @PrimaryGeneratedColumn()
-  id!: number;
+  @PrimaryGeneratedColumn("uuid")
+  id!: string;
 
   @Column({
     unique: true,

@@ -9,8 +9,8 @@ import { User } from "../../auth/entities/user.entity";
 
 @Entity()
 export class Profile {
-  @PrimaryGeneratedColumn()
-  id!: number;
+  @PrimaryGeneratedColumn("uuid")
+  id!: string;
 
   @Column({
     nullable: true,

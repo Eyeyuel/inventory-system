@@ -5,7 +5,7 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
-} from "typeorm";
+} from 'typeorm';
 
 @Entity()
 export class Category {
@@ -19,14 +19,14 @@ export class Category {
   name!: string;
 
   @Column({
-    nullable: false,
+    nullable: true,
   })
-  userId!: number;
+  description?: string;
 
   @Column({
     nullable: false,
   })
-  storeId!: number;
+  user!: number;
 
   @CreateDateColumn()
   createdAt!: Date;
