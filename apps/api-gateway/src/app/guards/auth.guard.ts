@@ -16,7 +16,7 @@ export class AuthGuard implements CanActivate {
     // const token = this.extractTokenFromHeader(request);
     const token = request.cookies.access_token;
     if (!token) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException("you need access_token");
     }
     try {
       // 💡 Here the JWT secret key that's used for verifying the payload

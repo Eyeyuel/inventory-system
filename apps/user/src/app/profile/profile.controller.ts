@@ -6,7 +6,7 @@ import { PROFILE_CMD } from "@inventory-system/constants";
 
 @Controller("profile")
 export class ProfileController {
-  constructor(private profileService: ProfileService) {}
+  constructor(private profileService: ProfileService) { }
 
   @MessagePattern(PROFILE_CMD.UPDATE)
   updateProfile(
@@ -17,8 +17,7 @@ export class ProfileController {
   }
 
   @MessagePattern(PROFILE_CMD.GET)
-  getProfile(@Payload() payload: { userId: number }) {
-    const { userId } = payload;
+  getProfile(@Payload() userId: number) {
     return this.profileService.getProfile(userId);
   }
 }

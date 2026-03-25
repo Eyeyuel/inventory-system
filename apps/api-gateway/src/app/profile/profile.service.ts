@@ -7,7 +7,7 @@ import { ClientProxy } from "@nestjs/microservices";
 export class ProfileService {
   constructor(
     @Inject("USERS_SERVICE") private readonly profileClient: ClientProxy,
-  ) {}
+  ) { }
   updateProfile(userId: number, updateProfileDto: UpdateProfileDto) {
     try {
       return this.profileClient.send(PROFILE_CMD.UPDATE, { userId, updateProfileDto });
