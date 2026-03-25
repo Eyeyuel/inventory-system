@@ -1,4 +1,17 @@
+# node_modules
+# dist
+# coverage
+# .nx
+
+# Dependency directories
 node_modules
 dist
-coverage
 .nx
+.angular
+
+# Build artifacts
+coverage
+*.log
+
+# Nx specific
+tmp
