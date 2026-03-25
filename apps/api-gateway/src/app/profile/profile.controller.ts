@@ -6,7 +6,7 @@ import { AuthGuard } from "../guards/auth.guard";
 @UseGuards(AuthGuard)
 @Controller("profile")
 export class ProfileController {
-  constructor(private readonly profileService: ProfileService) {}
+  constructor(private readonly profileService: ProfileService) { }
 
   @Patch()
   updateProfile(@Body() updateProfileDto: UpdateProfileDto, @Req() req: any) {

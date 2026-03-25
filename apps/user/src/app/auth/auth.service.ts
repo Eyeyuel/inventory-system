@@ -48,8 +48,9 @@ export class AuthService {
   }
 
   async signUp(signUpDto: SignUpDto) {
-    const User = await this.userService.create(signUpDto);
-    const token = this.generateToken(User);
-    return { User, access_token: token };
+    const result = await this.userService.create(signUpDto);
+    // const { password, ...result } = user;
+    const token = this.generateToken(result);
+    return { result, access_token: token };
   }
 }

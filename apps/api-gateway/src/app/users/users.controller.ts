@@ -1,35 +1,23 @@
-import {
-  Controller,
-  Post,
-  Body,
-  HttpStatus,
-  HttpCode,
-  Res,
-} from "@nestjs/common";
-import type { Response } from "express";
-import { UsersService } from "./users.service";
-import { SignInUserDto, SignUpDto } from "@inventory-system/dto";
-import { firstValueFrom } from "rxjs";
+import { Controller, Post, Body, HttpStatus, HttpCode, Res } from '@nestjs/common';
+import type { Response } from 'express';
+import { UsersService } from './users.service';
+import { SignInUserDto, SignUpDto } from '@inventory-system/dto';
+import { firstValueFrom } from 'rxjs';
 
-@Controller("users")
+@Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @HttpCode(HttpStatus.OK)
-  @Post("login")
-  async create(
-    @Body() signInUserDto: SignInUserDto,
-    @Res({ passthrough: true }) res: Response,
-  ) {
-    const response = await firstValueFrom(
-      this.usersService.login(signInUserDto),
-    );
+  @Post('login')
+  async create(@Body() signInUserDto: SignInUserDto, @Res({ passthrough: true }) res: Response) {
+    const response = await firstValueFrom(this.usersService.login(signInUserDto));
 
     const token = response.access_token;
-    res.cookie("access_token", token, {
+    res.cookie('access_token', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
       // expires: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000), // 1 day
       maxAge: 60 * 60 * 1000, // 1 hour
     });
@@ -38,8 +26,19 @@ export class UsersController {
   }
 
   @HttpCode(HttpStatus.OK)
-  @Post("signup")
-  register(@Body() signUpDto: SignUpDto) {
-    return this.usersService.signup(signUpDto);
+  @Post('signup')
+  async register(@Body() signUpDto: SignUpDto, @Res({ passthrough: true }) res: Response) {
+    const response = await firstValueFrom(this.usersService.signup(signUpDto));
+
+    const token = response.access_token;
+    res.cookie('access_token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      // expires: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000), // 1 day
+      maxAge: 60 * 60 * 1000, // 1 hour
+    });
+
+    return response.result;
   }
 }
