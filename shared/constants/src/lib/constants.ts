@@ -27,26 +27,26 @@ export const CATEGORY_CMD = {
   DELETE: { cmd: "delete_category" },
 };
 
+export const LOCATION_CMD = {
+  FIND: { cmd: "find_all_locations" },
+  CREATE: { cmd: "create_location" },
+  FIND_ONE: { cmd: "find_location" },
+  UPDATE: { cmd: "update_location" },
+  DELETE: { cmd: "delete_location" },
+};
+
+export const STOCK_CMD = {
+  FIND: { cmd: "find_all_stocks" },
+  CREATE: { cmd: "create_stock" },
+  FIND_ONE: { cmd: "find_stock" },
+  UPDATE: { cmd: "update_stock" },
+  DELETE: { cmd: "delete_stock" },
+};
+
 export const INVENTORY_CMD = {
   FIND: { cmd: "find_all_inventories" },
   CREATE: { cmd: "create_inventory" },
   FIND_ONE: { cmd: "find_inventory" },
   UPDATE: { cmd: "update_inventory" },
   DELETE: { cmd: "delete_inventory" },
-};
-
-export const ORDER_CMD = {
-  FIND: { cmd: "find_all_orders" },
-  CREATE: { cmd: "create_order" },
-  FIND_ONE: { cmd: "find_order" },
-  UPDATE: { cmd: "update_order" },
-  DELETE: { cmd: "delete_order" },
-};
-
-export const PAYMENT_CMD = {
-  FIND: { cmd: "find_all_payments" },
-  CREATE: { cmd: "create_payment" },
-  FIND_ONE: { cmd: "find_payment" },
-  UPDATE: { cmd: "update_payment" },
-  DELETE: { cmd: "delete_payment" },
 };

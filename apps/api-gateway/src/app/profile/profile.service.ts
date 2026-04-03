@@ -8,7 +8,7 @@ export class ProfileService {
   constructor(
     @Inject("USERS_SERVICE") private readonly profileClient: ClientProxy,
   ) { }
-  updateProfile(userId: number, updateProfileDto: UpdateProfileDto) {
+  updateProfile(userId: string, updateProfileDto: UpdateProfileDto) {
     try {
       return this.profileClient.send(PROFILE_CMD.UPDATE, { userId, updateProfileDto });
     } catch (error) {
@@ -19,7 +19,7 @@ export class ProfileService {
     }
   }
 
-  getProfile(userId: number) {
+  getProfile(userId: string) {
     try {
       return this.profileClient.send(PROFILE_CMD.GET, userId);
     } catch (error) {

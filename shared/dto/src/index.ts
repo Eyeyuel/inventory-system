@@ -4,3 +4,6 @@ export * from "./lib/sign-user-dto";
 export * from "./lib/product.dto";
 export * from "./lib/category.dto";
 export * from "./lib/profile.dto";
+export * from "./lib/location.dto";
+export * from "./lib/stock.dto";
+export * from "./lib/stock-movement.dto";

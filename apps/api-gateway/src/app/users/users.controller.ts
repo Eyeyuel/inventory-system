@@ -3,10 +3,12 @@ import type { Response } from 'express';
 import { UsersService } from './users.service';
 import { SignInUserDto, SignUpDto } from '@inventory-system/dto';
 import { firstValueFrom } from 'rxjs';
+import { Public } from '../common/decorators/public.decorator';
 
+@Public()
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService) { }
 
   @HttpCode(HttpStatus.OK)
   @Post('login')
@@ -19,7 +21,7 @@ export class UsersController {
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
       // expires: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000), // 1 day
-      maxAge: 60 * 60 * 1000, // 1 hour
+      maxAge: 60 * 60 * 24 * 1000, // 1 day
     });
 
     return response.result;

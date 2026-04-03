@@ -13,7 +13,11 @@ import cookieParser from "cookie-parser";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(new ValidationPipe({
+    whitelist: true,               // strips properties not in the DTO
+    forbidNonWhitelisted: true,   // throws a BadRequestException if extra fields are sent
+    transform: true,               // automatically transforms payload to DTO instances
+  }));
   const globalPrefix = "api";
   app.setGlobalPrefix(globalPrefix);
   app.useGlobalFilters(new RpcExceptionFilter());

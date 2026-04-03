@@ -1,35 +1,32 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { ClientProxy } from "@nestjs/microservices";
 import { PRODUCT_CMD } from "@inventory-system/constants";
-import { CreateProductDto } from "@inventory-system/dto";
+import { CreateProductDto, UpdateProductDto } from "@inventory-system/dto";
 
 @Injectable()
 export class ProductService {
   constructor(
-    @Inject("PRODUCT_SERVICE") private readonly productClient: ClientProxy,
-  ) {}
+    @Inject("INVENTORY_SERVICE") private readonly productClient: ClientProxy,
+  ) { }
 
-  create(createProductDto: CreateProductDto) {
-    const product = this.productClient.send(
-      PRODUCT_CMD.CREATE,
-      createProductDto,
-    );
+  create(createProductDto: CreateProductDto, userId: string) {
+    const product = this.productClient.send(PRODUCT_CMD.CREATE, { createProductDto, userId },);
     return product;
   }
 
-  findAll() {
-    return this.productClient.send(PRODUCT_CMD.FIND, {});
+  findAll(userId: string) {
+    return this.productClient.send(PRODUCT_CMD.FIND, userId);
   }
 
-  // findOne(id: number) {
-  //   return `This action returns a #${id} product`;
-  // }
+  findOne(id: string, userId: string) {
+    return this.productClient.send(PRODUCT_CMD.FIND_ONE, { id, userId });
+  }
 
-  // update(id: number, updateProductDto: UpdateProductDto) {
-  //   return `This action updates a #${id} product`;
-  // }
+  update(id: string, updateProductDto: UpdateProductDto, userId: string) {
+    return this.productClient.send(PRODUCT_CMD.UPDATE, { id, updateProductDto, userId });
+  }
 
-  // remove(id: number) {
-  //   return `This action removes a #${id} product`;
-  // }
+  remove(id: string, userId: string) {
+    return this.productClient.send(PRODUCT_CMD.DELETE, { id, userId });
+  }
 }

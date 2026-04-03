@@ -1,42 +1,49 @@
-import {
-  IsNotEmpty,
-  IsNumber,
-  IsOptional,
-  IsString,
-  MaxLength,
-} from "class-validator";
+import { PartialType } from '@nestjs/mapped-types';
+import { IsNumber, IsOptional, IsString, Length, Min, } from 'class-validator';
 
 export class CreateProductDto {
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
-  @MaxLength(100)
+  sku?: string;
+
+  @IsString()
+  @Length(1, 100)
   name!: string;
 
   @IsOptional()
   @IsString()
   description?: string;
 
-  @IsNotEmpty()
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  cost?: number;
+
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  price?: number;
+
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  reorderPoint?: number;
+
+  @IsOptional()
+  @IsNumber()
+  @Min(1)
+  reorderQuantity?: number;
+
+  // // If you want to create product with initial stocks (using cascade)
+  // @IsOptional()
+  // @ValidateNested({ each: true })
+  // @Type(() => CreateStockDto) // define CreateStockDto separately
+  // stocks?: CreateStockDto[];
+
+  // Relation fields (IDs)
+  @IsOptional()
   @IsString()
-  unitOfMeasurment!: string;
-
-  @IsNotEmpty()
-  @IsNumber()
-  costPrice!: number;
-
-  @IsNotEmpty()
-  @IsNumber()
-  sellingPrice!: number;
-
-  @IsNotEmpty()
-  @IsNumber()
-  quantity!: number;
-
-  @IsNotEmpty()
-  @IsNumber()
-  categoryId!: number;
-
-  // @IsNotEmpty()
-  // @IsNumber()
-  // userId!: number;
+  categoryId?: string;
 }
+
+export class UpdateProductDto extends PartialType(CreateProductDto) { }

@@ -1,20 +1,14 @@
-import { IsNotEmpty, IsNumber, IsString, MaxLength } from "class-validator";
+import { IsString, IsOptional, Length } from 'class-validator';
 
 export class CreateCategoryDto {
-  @IsNotEmpty()
   @IsString()
-  @MaxLength(100)
+  @Length(1, 100)
   name!: string;
 
-  // userId: from apigateway(authGuard)
-  // @IsNotEmpty()
-  // @IsNumber()
-  // userId!: number;
-
-  // storeId: from apigateway(authGuard)
-  // userId: number;
-
-  @IsNotEmpty()
-  @IsNumber()
-  storeId!: number;
+  @IsOptional()
+  @IsString()
+  description?: string;
 }
+
+import { PartialType } from '@nestjs/mapped-types';
+export class UpdateCategoryDto extends PartialType(CreateCategoryDto) { }
