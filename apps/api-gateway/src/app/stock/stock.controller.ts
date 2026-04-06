@@ -1,4 +1,4 @@
-import { GetStocksQueryDto, ReceiveStockDto, ShipStockDto, TransferStockDto } from '@inventory-system/dto';
+import { AdjustStockDto, GetStocksQueryDto, ReceiveStockDto, ShipStockDto, TransferStockDto } from '@inventory-system/dto';
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
 import { StockService } from './stock.service';
@@ -29,6 +29,11 @@ export class StockController {
   @Post("transfer")
   transfer(@Body() transferStockDto: TransferStockDto, @CurrentUser() user: { sub: string }) {
     return this.stockService.transfer(transferStockDto, user.sub);
+  }
+
+  @Post("adjust")
+  adjust(@Body() adjustStockDto: AdjustStockDto, @CurrentUser() user: { sub: string }) {
+    return this.stockService.adjust(adjustStockDto, user.sub);
   }
 
   // @Post("ship")

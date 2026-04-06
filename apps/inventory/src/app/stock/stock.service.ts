@@ -1,13 +1,13 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { DataSource, QueryRunner } from 'typeorm';
-import { GetStocksQueryDto, ReceiveStockDto, ShipStockDto, TransferStockDto } from '@inventory-system/dto';
+import { AdjustStockDto, GetStocksQueryDto, ReceiveStockDto, ShipStockDto, TransferStockDto } from '@inventory-system/dto';
 import { Stock } from '../stock/entities/stock.entity';
 import { StockMovement } from '../stockMovement/entities/stock-movement.entity';
 import { RpcException } from '@nestjs/microservices';
 import { Product } from '../product/entities/product.entity';
 import { Location } from '../location/entities/location.entity';
 import { handleRpcException } from '@inventory-system/constants';
-import { StockMovementType } from '@inventory-system/types';
+import { StockMovementReasonsTypeForAdjust, StockMovementType } from '@inventory-system/types';
 
 @Injectable()
 export class StockService {
@@ -475,7 +475,7 @@ export class StockService {
 
       // create sotck movement
       const movement = movementRepo.create({
-        type: StockMovementType.ADJUST,
+        type: StockMovementType.TRANSFER,
         quantityChange: transferStockDto.quantity,
         beforeQuantity: beforeQty,
         afterQuantity: newQty,
@@ -490,6 +490,126 @@ export class StockService {
       await queryRunner.commitTransaction();
       return { stock, newStock, movement };
     } catch (error) {
+      await queryRunner.rollbackTransaction();
+      //     // Error handling as per your existing logic
+      handleRpcException(error, "Database error while receiving stock");
+    } finally {
+      await queryRunner.release();
+    }
+  }
+
+  async adjust(adjustStockDto: AdjustStockDto, userId: string) {
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      const stockRepo = queryRunner.manager.getRepository(Stock);
+      const movementRepo = queryRunner.manager.getRepository(StockMovement);
+      const productRepo = queryRunner.manager.getRepository(Product);
+      const locationRepo = queryRunner.manager.getRepository(Location);
+
+      // 1. Validate product ownership
+      const product = await productRepo.findOneBy({ id: adjustStockDto.productId, user: userId });
+      if (!product) {
+        throw new RpcException({ statusCode: 400, message: 'Product not found or not owned by user' });
+      }
+
+      // 2. Validate location ownership
+      const location = await locationRepo.findOneBy({ id: adjustStockDto.locationId, user: userId });
+      if (!location) {
+        throw new RpcException({ statusCode: 400, message: 'Location not found or not owned by user' });
+      }
+
+      // 3. Find or create stock record (TypeScript-safe)
+      const stock = await stockRepo.findOne({
+        where: {
+          product: { id: adjustStockDto.productId },
+          location: { id: adjustStockDto.locationId }
+        },
+        // relations: ['product', 'location']
+      });
+
+      if (!stock) throw new RpcException({ statusCode: 400, message: 'Stock not found' })
+
+      // determine whether to add, reduce or set the quntity
+      const beforeQty = stock.quantity;
+      let newQty = 0;
+      // Validation based on reason code
+      switch (adjustStockDto.reasonCode) {
+        case StockMovementReasonsTypeForAdjust.DAMAGE:
+        case StockMovementReasonsTypeForAdjust.LOSS:
+          if (adjustStockDto.quantityChange >= 0) {
+            throw new RpcException({
+              statusCode: 400,
+              message: `For reason code "${adjustStockDto.reasonCode}", quantityChange must be negative (decrease stock)`
+            });
+          }
+          newQty = beforeQty + adjustStockDto.quantityChange; // quantityChange is negative → subtraction
+          break;
+
+        case StockMovementReasonsTypeForAdjust.FOUND:
+          if (adjustStockDto.quantityChange <= 0) {
+            throw new RpcException({
+              statusCode: 400,
+              message: `For reason code "found", quantityChange must be positive (increase stock)`
+            });
+          }
+          newQty = beforeQty + adjustStockDto.quantityChange;
+          break;
+
+        case StockMovementReasonsTypeForAdjust.CORRECTION:
+          // Can be positive or negative, no restriction
+          newQty = beforeQty + adjustStockDto.quantityChange;
+          break;
+
+        case StockMovementReasonsTypeForAdjust.CYCLE_COUNT:
+          if (adjustStockDto.quantityChange < 0) {
+            throw new RpcException({
+              statusCode: 400,
+              message: `For reason code "cycle_count", quantityChange must be non-negative (absolute new quantity)`
+            });
+          }
+          newQty = adjustStockDto.quantityChange; // absolute replacement
+          break;
+
+        default:
+          throw new RpcException({
+            statusCode: 400,
+            message: `Invalid reason code: ${adjustStockDto.reasonCode}. Allowed: damage, loss, found, correction, cycle_count`
+          });
+      }
+      // Final validation: stock cannot be negative
+      if (newQty < 0) {
+        throw new RpcException({
+          statusCode: 400,
+          message: `Insufficient stock. Current: ${beforeQty}, attempted change would result in ${newQty}`
+        });
+      }
+
+      // const newQty = beforeQty + adjustStockDto.quantityChange;
+
+      stock.quantity = newQty;
+      stock.user = userId;
+      await stockRepo.save(stock);
+
+      const movement = movementRepo.create({
+        type: StockMovementType.ADJUST,
+        quantityChange: adjustStockDto.quantityChange,
+        beforeQuantity: beforeQty,
+        afterQuantity: newQty,
+        referenceId: adjustStockDto.referenceId,
+        reason: adjustStockDto.reasonCode,
+        description: adjustStockDto.description,
+        user: userId,
+        stock,
+      });
+      await movementRepo.save(movement);
+
+      await queryRunner.commitTransaction();
+      return { stock, movement };
+    }
+
+    catch (error) {
       await queryRunner.rollbackTransaction();
       //     // Error handling as per your existing logic
       handleRpcException(error, "Database error while receiving stock");

@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 
 import { ClientProxy } from '@nestjs/microservices';
 import { STOCK_CMD } from '@inventory-system/constants';
-import { GetStocksQueryDto, ReceiveStockDto, ShipStockDto, TransferStockDto } from '@inventory-system/dto';
+import { AdjustStockDto, GetStocksQueryDto, ReceiveStockDto, ShipStockDto, TransferStockDto } from '@inventory-system/dto';
 // import { CreateMovementDto, CreateStockDto, UpdateStockDto } from '@inventory-system/dto';
 
 @Injectable()
@@ -29,6 +29,10 @@ export class StockService {
   }
   transfer(transferStockDto: TransferStockDto, userId: string) {
     return this.inventoryClient.send(STOCK_CMD.TRANSFER, { transferStockDto, userId })
+  }
+
+  adjust(adjustStockDto: AdjustStockDto, userId: string) {
+    return this.inventoryClient.send(STOCK_CMD.ADJUST, { adjustStockDto, userId })
   }
 
   // findOne(id: string, userId: string) {

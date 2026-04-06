@@ -1,5 +1,5 @@
 import { IsUUID, IsInt, Min, IsString, IsOptional, IsIn, Max, IsDateString, IsEnum } from 'class-validator';
-import { StockMovementType } from '@inventory-system/types';
+import { StockMovementReasonsTypeForAdjust, StockMovementType } from '@inventory-system/types';
 
 export class ReceiveStockDto {
     @IsUUID()
@@ -94,12 +94,8 @@ export class AdjustStockDto {
     @Max(999999)
     quantityChange!: number; // can be negative
 
-    @IsString()
-    @IsIn(['damage', 'loss', 'found', 'correction', 'cycle_count'])
-    reasonCode!: string;
-
-    @IsOptional()
-    reason?: string;
+    @IsEnum(StockMovementReasonsTypeForAdjust)
+    reasonCode!: StockMovementReasonsTypeForAdjust;
 
     @IsOptional()
     description?: string;
@@ -107,9 +103,6 @@ export class AdjustStockDto {
     @IsOptional()
     @IsString()
     referenceId?: string;
-
-    @IsUUID()
-    userId!: string;
 }
 
 export class GetStockMovementsQueryDto {

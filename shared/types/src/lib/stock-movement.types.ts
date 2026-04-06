@@ -2,8 +2,9 @@ export enum StockMovementType {
     RECEIVE = 'recive',
     SHIP = 'ship',
     ADJUST = 'adjust',
-    TRANSFER_OUT = 'transferOut',
-    TRANSFER_IN = 'transferIn',
+    // TRANSFER_OUT = 'transferOut',
+    // TRANSFER_IN = 'transferIn',
+    TRANSFER = 'transfer',
 }
 
 export enum StockMovementReasonsTypeForReceive {

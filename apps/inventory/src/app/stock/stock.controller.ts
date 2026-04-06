@@ -2,7 +2,7 @@ import { Controller } from '@nestjs/common';
 import { StockService } from './stock.service';
 import { STOCK_CMD } from '@inventory-system/constants';
 import { MessagePattern, Payload } from '@nestjs/microservices';
-import { GetStocksQueryDto, ReceiveStockDto, ShipStockDto, TransferStockDto } from '@inventory-system/dto';
+import { AdjustStockDto, GetStocksQueryDto, ReceiveStockDto, ShipStockDto, TransferStockDto } from '@inventory-system/dto';
 
 
 @Controller()
@@ -23,10 +23,15 @@ export class StockController {
   ship(@Payload() payload: { shipStockDto: ShipStockDto, userId: string }) {
     return this.stockService.ship(payload.shipStockDto, payload.userId);
   }
-  
+
   @MessagePattern(STOCK_CMD.TRANSFER)
   transfer(@Payload() payload: { transferStockDto: TransferStockDto, userId: string }) {
     return this.stockService.transfer(payload.transferStockDto, payload.userId);
+  }
+
+  @MessagePattern(STOCK_CMD.ADJUST)
+  adjust(@Payload() payload: { adjustStockDto: AdjustStockDto, userId: string }) {
+    return this.stockService.adjust(payload.adjustStockDto, payload.userId);
   }
 
 
