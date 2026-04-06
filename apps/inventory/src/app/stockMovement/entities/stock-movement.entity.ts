@@ -27,6 +27,9 @@ export class StockMovement {
     // maybe make this an enum that an admin can create
     reason?: string;           // optional explanation
 
+    @Column({ nullable: true, type: 'text' })
+    description?: string;
+
     @Column({ nullable: false })
     user!: string;            // who performed the movement
 

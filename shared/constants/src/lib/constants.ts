@@ -41,6 +41,10 @@ export const STOCK_CMD = {
   FIND_ONE: { cmd: "find_stock" },
   UPDATE: { cmd: "update_stock" },
   DELETE: { cmd: "delete_stock" },
+  RECEIVE: { cmd: "receive_stock" },
+  SHIP: { cmd: "ship_stock" },
+  TRANSFER: { cmd: "transfer_stock" },
+  ADJUST: { cmd: "adjust_stock" },
 };
 
 export const INVENTORY_CMD = {
