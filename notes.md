@@ -1,5 +1,7 @@
 # inventory MS
 
+/////////////////////////////// add swagger ///////////////////////
+
 product (name) should be uniqe ???
 SKU when product is added??
 
@@ -44,13 +46,13 @@ A user should be able to define and manage locations (warehouse → zone → bin
 
 A user should be able to receive stock into a specific location (against a purchase order or without one) (✅ exept without purcahse order)
 
-A user should be able to ship stock from a location (against a sales order)
+A user should be able to ship stock from a location (against a sales order) (✅)
 
-A user should be able to move stock between locations (e.g., bin to bin, warehouse to warehouse)
+A user should be able to move stock between locations (e.g., bin to bin, warehouse to warehouse) (✅)
 
-A user should be able to adjust stock (add or remove quantity with a reason: damage, loss, found)
+A user should be able to adjust stock (add or remove quantity with a reason: damage, loss, found) (✅)
 
-A user should be able to view real-time on-hand quantity by product and location
+A user should be able to view real-time on-hand quantity by product and location (✅)
 
 A user should be able to see available-to-promise (ATP) = on-hand minus allocated
 
@@ -62,7 +64,7 @@ A user should be able to scan barcodes for receiving, picking, moving, and count
 
 A user should be able to perform a cycle count (compare expected vs actual, record difference)
 
-A user should be able to view full transaction history (who did what, when, why)
+A user should be able to view full transaction history (who did what, when, why) (✅)
 
 A user should be able to set reorder points and receive low-stock alerts
 

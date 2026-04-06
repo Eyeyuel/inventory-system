@@ -1,5 +1,6 @@
 import { IsUUID, IsInt, Min, IsString, IsOptional, IsIn, Max, IsDateString, IsEnum } from 'class-validator';
 import { StockMovementReasonsTypeForAdjust, StockMovementType } from '@inventory-system/types';
+import { Type } from 'class-transformer';
 
 export class ReceiveStockDto {
     @IsUUID()
@@ -108,11 +109,15 @@ export class AdjustStockDto {
 export class GetStockMovementsQueryDto {
     @IsOptional()
     @IsUUID()
-    productId?: string;
+    stockId?: string;              // filter by specific stock (product+location)
 
-    @IsOptional()
-    @IsUUID()
-    locationId?: string;
+    // @IsOptional()
+    // @IsUUID()
+    // productId?: string;
+
+    // @IsOptional()
+    // @IsUUID()
+    // locationId?: string;
 
     @IsOptional()
     @IsEnum(StockMovementType)
@@ -129,12 +134,24 @@ export class GetStockMovementsQueryDto {
     @IsOptional()
     @IsInt()
     @Min(1)
-    limit?: number = 100;
+    @Type(() => Number)
+    page?: number = 1;             // pagination
+
+    @IsOptional()
+    @IsInt()
+    @Min(1)
+    limit?: number = 2;
+
+    @IsOptional()
+    referenceId?: string;          // order ID, purchase order ID
 
     @IsOptional()
     @IsInt()
     @Min(0)
     offset?: number = 0;
+
+    // @IsOptional()
+    // userId?: string;               // who performed (if you have user IDs)
 }
 
 export class GetStocksQueryDto {
@@ -147,55 +164,4 @@ export class GetStocksQueryDto {
     productId?: string;
 
 }
-
-
-// // create-movement.dto.ts
-// import { IsEnum, IsInt, IsOptional, IsString, IsUUID } from 'class-validator';
-// import { StockMovementType } from '@inventory-system/types';
-
-// export class CreateMovementDto {
-//     @IsUUID()
-//     productId!: string;
-
-//     @IsUUID()
-//     locationId!: string;
-
-//     @IsEnum(StockMovementType)
-//     type!: StockMovementType;
-
-//     @IsInt()dddddddddddd
-//     quantityChange!: number; // positive or negative
-
-//     @IsOptional()
-//     @IsString()
-//     referenceId?: string;
-
-//     @IsOptional()
-//     @IsString()
-//     reason?: string;
-// }
-
-// // transfer-stock.dto.ts
-
-// export class TransferStockDto {
-//     @IsUUID()
-//     productId!: string;
-
-//     @IsUUID()
-//     fromLocationId!: string;
-
-//     @IsUUID()
-//     toLocationId!: string;
-
-//     @IsInt()
-//     quantity!: number; // positive
-
-//     @IsOptional()
-//     @IsString()
-//     referenceId?: string;
-
-//     @IsOptional()
-//     @IsString()
-//     reason?: string;
-// }
 

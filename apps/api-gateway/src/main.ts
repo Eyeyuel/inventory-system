@@ -17,6 +17,7 @@ async function bootstrap() {
     whitelist: true,               // strips properties not in the DTO
     forbidNonWhitelisted: true,   // throws a BadRequestException if extra fields are sent
     transform: true,               // automatically transforms payload to DTO instances
+    transformOptions: { enableImplicitConversion: true }, // This handles the Type automatically
   }));
   const globalPrefix = "api";
   app.setGlobalPrefix(globalPrefix);

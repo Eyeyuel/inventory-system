@@ -2,7 +2,7 @@ import { Controller } from '@nestjs/common';
 import { StockService } from './stock.service';
 import { STOCK_CMD } from '@inventory-system/constants';
 import { MessagePattern, Payload } from '@nestjs/microservices';
-import { AdjustStockDto, GetStocksQueryDto, ReceiveStockDto, ShipStockDto, TransferStockDto } from '@inventory-system/dto';
+import { AdjustStockDto, GetStockMovementsQueryDto, GetStocksQueryDto, ReceiveStockDto, ShipStockDto, TransferStockDto } from '@inventory-system/dto';
 
 
 @Controller()
@@ -12,6 +12,11 @@ export class StockController {
   @MessagePattern(STOCK_CMD.FIND)
   findAll(@Payload() payload: { userId: string, where: GetStocksQueryDto }) {
     return this.stockService.getStocks(payload.userId, payload.where);
+  }
+
+  @MessagePattern(STOCK_CMD.FIND_MOVEMENTS)
+  findAllStockMovements(@Payload() payload: { filters: GetStockMovementsQueryDto, userId: string }) {
+    return this.stockService.findAllStockMovements(payload.filters, payload.userId)
   }
 
   @MessagePattern(STOCK_CMD.RECEIVE)
@@ -33,22 +38,4 @@ export class StockController {
   adjust(@Payload() payload: { adjustStockDto: AdjustStockDto, userId: string }) {
     return this.stockService.adjust(payload.adjustStockDto, payload.userId);
   }
-
-
-
-
-  // @MessagePattern(STOCK_CMD.FIND_ONE)
-  // findOne(@Payload() payload: { id: string, userId: string }) {
-  //   return this.stockService.findOne(payload.id, payload.userId);
-  // }
-
-  // @MessagePattern(STOCK_CMD.UPDATE)
-  // update(@Payload() payload: { id: string, updateStockDto: UpdateStockDto, userId: string }) {
-  //   return this.stockService.update(payload.id, payload.updateStockDto, payload.userId);
-  // }
-
-  // @MessagePattern(STOCK_CMD.DELETE)
-  // remove(@Payload() payload: { id: string, userId: string }) {
-  //   return this.stockService.remove(payload.id, payload.userId);
-  // }
 }

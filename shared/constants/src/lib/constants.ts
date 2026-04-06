@@ -45,6 +45,7 @@ export const STOCK_CMD = {
   SHIP: { cmd: "ship_stock" },
   TRANSFER: { cmd: "transfer_stock" },
   ADJUST: { cmd: "adjust_stock" },
+  FIND_MOVEMENTS: { cmd: "find_movements" }
 };
 
 export const INVENTORY_CMD = {

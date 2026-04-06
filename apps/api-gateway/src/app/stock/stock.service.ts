@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 
 import { ClientProxy } from '@nestjs/microservices';
 import { STOCK_CMD } from '@inventory-system/constants';
-import { AdjustStockDto, GetStocksQueryDto, ReceiveStockDto, ShipStockDto, TransferStockDto } from '@inventory-system/dto';
+import { AdjustStockDto, GetStockMovementsQueryDto, GetStocksQueryDto, ReceiveStockDto, ShipStockDto, TransferStockDto } from '@inventory-system/dto';
 // import { CreateMovementDto, CreateStockDto, UpdateStockDto } from '@inventory-system/dto';
 
 @Injectable()
@@ -21,6 +21,10 @@ export class StockService {
     return this.inventoryClient.send(STOCK_CMD.FIND, { userId, where })
   }
 
+  findAllStockMovements(userId: string, filters: GetStockMovementsQueryDto) {
+    return this.inventoryClient.send(STOCK_CMD.FIND_MOVEMENTS, { filters, userId })
+  }
+
   reciveStock(reciveStockDto: ReceiveStockDto, userId: string) {
     return this.inventoryClient.send(STOCK_CMD.RECEIVE, { reciveStockDto, userId })
   }
@@ -34,17 +38,4 @@ export class StockService {
   adjust(adjustStockDto: AdjustStockDto, userId: string) {
     return this.inventoryClient.send(STOCK_CMD.ADJUST, { adjustStockDto, userId })
   }
-
-  // findOne(id: string, userId: string) {
-  //   return this.inventoryClient.send(STOCK_CMD.FIND_ONE, { id, userId })
-  // }
-
-
-  // update(id: string, updateStockDto: UpdateStockDto, userId: string) {
-  //   return this.inventoryClient.send(STOCK_CMD.UPDATE, { id, updateStockDto, userId })
-  // }
-
-  // remove(id: string, userId: string) {
-  //   return this.inventoryClient.send(STOCK_CMD.DELETE, { id, userId })
-  // }
 }
