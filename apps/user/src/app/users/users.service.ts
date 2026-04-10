@@ -5,25 +5,27 @@ import { User } from "../auth/entities/user.entity";
 import { RpcException } from "@nestjs/microservices";
 import { SignUpDto } from "@inventory-system/dto";
 import * as bcrypt from "bcrypt";
+import { handleRpcException } from "@inventory-system/constants";
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
-  ) {}
+  ) { }
 
   async findone(email: string) {
     try {
       const user = await this.userRepository.findOneBy({ email });
+      if (!user) {
+        // Throw 401 – same message as wrong password to avoid email enumeration
+        throw new RpcException({
+          statusCode: 401,
+          message: "Invalid credentials",
+        });
+      }
       return user;
     } catch (error) {
-      console.error(`Error finding user by email: ${email}`, error.stack);
-
-      // Throw RpcException – it will be sent to the API Gateway
-      throw new RpcException({
-        statusCode: 500,
-        message: "Database error while retrieving user",
-      });
+      handleRpcException(error, "Database error while getting user");
     }
   }
 
@@ -47,22 +49,7 @@ export class UsersService {
       const { password, ...result } = savedUser;
       return result;
     } catch (error) {
-      // Check if it's a duplicate key violation
-      if (
-        error instanceof QueryFailedError &&
-        (error as any).code === "23505"
-      ) {
-        throw new RpcException({
-          statusCode: 409,
-          message: "Email already exists",
-        });
-      }
-
-      console.error("Error creating user", error.stack);
-      throw new RpcException({
-        statusCode: 500,
-        message: "Database error while creating user",
-      });
+      handleRpcException(error, "Database error while creating user");
     }
   }
 }

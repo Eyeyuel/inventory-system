@@ -1,34 +1,43 @@
-import { PartialType } from '@nestjs/mapped-types';
 import { IsNumber, IsOptional, IsString, Length, Min, } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional, PartialType } from '@nestjs/swagger';
+import { CategoryResponseDto } from './category.dto';
 
 export class CreateProductDto {
+  // @ApiPropertyOptional({ description: 'SKU (Stock Keeping Unit)', example: '555 sku', nullable: true })
+  @ApiProperty({ example: '555 sku', nullable: true })
   @IsOptional()
   @IsString()
   sku?: string;
 
+  @ApiProperty({ example: 'Product name', nullable: false })
   @IsString()
   @Length(1, 100)
   name!: string;
 
+  @ApiProperty({ example: 'Product description', nullable: true })
   @IsOptional()
   @IsString()
   description?: string;
 
+  @ApiProperty({ example: 100, nullable: true })
   @IsOptional()
   @IsNumber()
   @Min(0)
   cost?: number;
 
+  @ApiProperty({ example: 100, nullable: true })
   @IsOptional()
   @IsNumber()
   @Min(0)
   price?: number;
 
+  @ApiProperty({ example: 100, nullable: true })
   @IsOptional()
   @IsNumber()
   @Min(0)
   reorderPoint?: number;
 
+  @ApiProperty({ example: 100, nullable: true })
   @IsOptional()
   @IsNumber()
   @Min(1)
@@ -41,9 +50,59 @@ export class CreateProductDto {
   // stocks?: CreateStockDto[];
 
   // Relation fields (IDs)
+  @ApiProperty({ example: 'eab399c3-740c-4ae9-b6e5-60a908c96a6e', format: 'uuid', nullable: true })
   @IsOptional()
   @IsString()
   categoryId?: string;
 }
 
 export class UpdateProductDto extends PartialType(CreateProductDto) { }
+
+// Responses
+
+export class ProductResponseDto {
+  @ApiProperty({ description: 'Product ID', example: 'eab399c3-740c-4ae9-b6e5-60a908c96a6e', format: 'uuid' })
+  id!: string;
+
+  @ApiPropertyOptional({ description: 'SKU (Stock Keeping Unit)', example: '555 sku', nullable: true })
+  sku!: string | null;
+
+  @ApiProperty({ description: 'Product name', example: "Abel's 1 product" })
+  name!: string;
+
+  @ApiPropertyOptional({ description: 'Product description', example: 'edited new description', nullable: true })
+  description!: string | null;
+
+  @ApiProperty({ description: 'Product cost', example: 100 })
+  cost!: number;
+
+  @ApiProperty({ description: 'Selling price', example: 170 })
+  price!: number;
+
+  @ApiProperty({ description: 'Reorder point threshold', example: 100 })
+  reorderPoint!: number;
+
+  @ApiProperty({ description: 'Quantity to reorder', example: 1000 })
+  reorderQuantity!: number;
+
+  @ApiProperty({ description: 'User ID that owns the product', example: '27b5030c-71d6-45e5-b9d8-d0cd79bfaca0', format: 'uuid' })
+  user!: string;
+
+  @ApiPropertyOptional({ description: 'Purchase order items', example: null, nullable: true })
+  purchaseOrderItems!: unknown | null;
+
+  @ApiPropertyOptional({ description: 'Sales order items', example: null, nullable: true })
+  salesOrderItems!: unknown | null;
+
+  @ApiProperty({ description: 'Creation timestamp', example: '2026-03-31T14:18:28.436Z', format: 'date-time' })
+  createdAt!: string;
+
+  @ApiProperty({ description: 'Last update timestamp', example: '2026-04-02T12:15:17.596Z', format: 'date-time' })
+  updatedAt!: string;
+
+  @ApiPropertyOptional({ description: 'Soft deletion timestamp', example: null, nullable: true, format: 'date-time' })
+  deletedAt!: string | null;
+
+  @ApiProperty({ description: 'Product category', type: CategoryResponseDto })
+  category!: CategoryResponseDto;
+}

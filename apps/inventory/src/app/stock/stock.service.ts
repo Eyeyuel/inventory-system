@@ -1,6 +1,6 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { Between, DataSource, FindOptionsWhere, QueryRunner } from 'typeorm';
-import { AdjustStockDto, GetStockMovementsQueryDto, GetStocksQueryDto, ReceiveStockDto, ShipStockDto, TransferStockDto } from '@inventory-system/dto';
+import { AdjustStockDto, GetStockMovementsQueryDto, GetStocksQueryDto, ReceiveStockDto, ShipStockDto, StockMovementResponseDto, StockMovementSummaryDto, TransferStockDto } from '@inventory-system/dto';
 import { Stock } from '../stock/entities/stock.entity';
 import { StockMovement } from '../stockMovement/entities/stock-movement.entity';
 import { RpcException } from '@nestjs/microservices';
@@ -9,44 +9,6 @@ import { Location } from '../location/entities/location.entity';
 import { handleRpcException } from '@inventory-system/constants';
 import { StockMovementReasonsTypeForAdjust, StockMovementType } from '@inventory-system/types';
 
-// dto/stock-movement-response.dto.ts
-
-// Slimmed-down movement summary
-export interface StockMovementSummaryDto {
-  id: string;
-  type: string;  // or StockMovementType if you want to import
-  quantityChange: number;
-  createdAt: Date;
-  reason?: string;
-  description?: string;
-  user: string;
-  stock: {
-    id: string;
-    quantity: number;
-    product: {
-      id: string;
-      name: string;
-    };
-    location: {
-      id: string;
-      name: string;
-    };
-  };
-}
-
-// Pagination metadata
-export interface MetaDto {
-  total: number;
-  page: number;
-  limit: number;
-  totalPages: number;
-}
-
-// Final response wrapper
-export interface StockMovementResponseDto {
-  data: StockMovementSummaryDto[];
-  meta: MetaDto;
-}
 @Injectable()
 export class StockService {
   constructor(private dataSource: DataSource) { }

@@ -22,7 +22,7 @@ async function bootstrap() {
   const globalPrefix = "api";
   app.setGlobalPrefix(globalPrefix);
   app.useGlobalFilters(new RpcExceptionFilter());
-  app.use(cookieParser());
+  // app.use(cookieParser());
 
   const configService = app.get(ConfigService);
   // const port = process.env.PORT || 3001;
@@ -34,6 +34,7 @@ async function bootstrap() {
     .setDescription("Mulit-user Inventory managment system")
     .setVersion("1.0")
     .addTag("routes")
+    .addBearerAuth()
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup("api", app, documentFactory);

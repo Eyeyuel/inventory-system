@@ -1,5 +1,5 @@
-import { Injectable, UnauthorizedException } from "@nestjs/common";
-import { SignInUserDto, SignUpDto } from "@inventory-system/dto";
+import { Injectable } from "@nestjs/common";
+import { LoginDto, SignUpDto } from "@inventory-system/dto";
 import { UsersService } from "../users/users.service";
 import { RpcException } from "@nestjs/microservices";
 import { JwtService } from "@nestjs/jwt";
@@ -11,28 +11,20 @@ export class AuthService {
   constructor(
     private userService: UsersService,
     private jwtService: JwtService,
-  ) {}
+  ) { }
 
   private generateToken(user: Partial<User>): string {
     const payload = { sub: user.id, email: user.email };
     return this.jwtService.sign(payload);
   }
 
-  async signIn(
-    signInUserDto: SignInUserDto,
+  async login(
+    loginDto: LoginDto,
   ): Promise<{ access_token: string; result: Partial<User> }> {
-    const user = await this.userService.findone(signInUserDto.email);
-
-    if (!user) {
-      // Throw 401 – same message as wrong password to avoid email enumeration
-      throw new RpcException({
-        statusCode: 401,
-        message: "Invalid credentials",
-      });
-    }
+    const user = await this.userService.findone(loginDto.email);
 
     // Compare password
-    const isMatch = await bcrypt.compare(signInUserDto.password, user.password);
+    const isMatch = await bcrypt.compare(loginDto.password, user.password);
     if (!isMatch) {
       throw new RpcException({
         statusCode: 401,

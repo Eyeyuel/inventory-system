@@ -2,15 +2,15 @@ import { Controller } from "@nestjs/common";
 import { MessagePattern, Payload } from "@nestjs/microservices";
 import { AuthService } from "./auth.service";
 import { USER_CMD } from "@inventory-system/constants";
-import { SignInUserDto, SignUpDto } from "@inventory-system/dto";
+import { LoginDto, SignUpDto } from "@inventory-system/dto";
 
 @Controller()
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) { }
 
   @MessagePattern(USER_CMD.LOGIN)
-  signIn(@Payload() signInUserDto: SignInUserDto) {
-    return this.authService.signIn(signInUserDto);
+  signIn(@Payload() loginDto: LoginDto) {
+    return this.authService.login(loginDto);
   }
 
   @MessagePattern(USER_CMD.SIGNUP)
