@@ -1,7 +1,7 @@
 export const USER_CMD = {
   LOGIN: { cmd: "login_user" },
   SIGNUP: { cmd: "signup_user" },
-  // CREATE: { cmd: "create_user" },
+  REFRESH: { cmd: "refresh_user" },
   // FIND_ONE: { cmd: "find_user" },
   // UPDATE: { cmd: "update_user" },
   // DELETE: { cmd: "delete_user" },

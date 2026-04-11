@@ -1,10 +1,8 @@
-import { Controller, Post, Body, HttpStatus, HttpCode, Res } from '@nestjs/common';
-import type { Response } from 'express';
-import { UsersService } from './users.service';
 import { LoginDto, LoginResponseDto, SignUpDto, SignupResponseDto } from '@inventory-system/dto';
-import { firstValueFrom } from 'rxjs';
-import { Public } from '../common/decorators/public.decorator';
+import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { ApiBadRequestResponse, ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import { Public } from '../common/decorators/public.decorator';
+import { UsersService } from './users.service';
 
 @Public()
 @Controller('users')
@@ -19,19 +17,8 @@ export class UsersController {
   @ApiUnauthorizedResponse({ description: 'Invalid credentials' })
   @HttpCode(HttpStatus.OK)
   @Post('login')
-  async create(@Body() loginDto: LoginDto, @Res({ passthrough: true }) res: Response) {
-    const response = await firstValueFrom(this.usersService.login(loginDto));
-
-    const token = response.access_token;
-    res.cookie('access_token', token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      // expires: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000), // 1 day
-      maxAge: 60 * 60 * 24 * 1000, // 1 day
-    });
-
-    return response.result;
+  async create(@Body() loginDto: LoginDto) {
+    return this.usersService.login(loginDto)
   }
 
   @ApiOperation({ summary: 'Signup using email, name and password' })
@@ -41,18 +28,22 @@ export class UsersController {
   })
   @ApiBadRequestResponse({ description: 'Invalid credentials', })
   @Post('signup')
-  async register(@Body() signUpDto: SignUpDto, @Res({ passthrough: true }) res: Response) {
-    const response = await firstValueFrom(this.usersService.signup(signUpDto));
+  async register(@Body() signUpDto: SignUpDto) {
+    return this.usersService.signup(signUpDto);
+  }
 
-    const token = response.access_token;
-    res.cookie('access_token', token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      // expires: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000), // 1 day
-      maxAge: 60 * 60 * 1000, // 1 hour
-    });
-
-    return response.result;
+  @ApiOperation({ summary: 'Refresh Token' })
+  @ApiOkResponse({
+    description: 'Success. Return new access_token and refresh_token.',
+    // type:
+    // {
+    //   access_token: String,
+    //   refresh_token: String
+    // }
+  })
+  @ApiBadRequestResponse({ description: 'Invalid Refresh Token', })
+  @Post('refresh')
+  async refresh(@Body('refresh_token') refresh_token: string) {
+    return this.usersService.refresh(refresh_token);
   }
 }

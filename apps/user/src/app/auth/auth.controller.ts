@@ -1,8 +1,8 @@
+import { USER_CMD } from "@inventory-system/constants";
+import { LoginDto, SignUpDto } from "@inventory-system/dto";
 import { Controller } from "@nestjs/common";
 import { MessagePattern, Payload } from "@nestjs/microservices";
 import { AuthService } from "./auth.service";
-import { USER_CMD } from "@inventory-system/constants";
-import { LoginDto, SignUpDto } from "@inventory-system/dto";
 
 @Controller()
 export class AuthController {
@@ -16,6 +16,12 @@ export class AuthController {
   @MessagePattern(USER_CMD.SIGNUP)
   signUp(@Payload() signUpDto: SignUpDto) {
     return this.authService.signUp(signUpDto);
+  }
+
+  @MessagePattern(USER_CMD.REFRESH)
+  refresh(@Payload() payload: { refreshToken: string }) {
+    return this.authService.refresh(payload.refreshToken);
+
   }
 
   // @MessagePattern({ cmd: "create_user" })

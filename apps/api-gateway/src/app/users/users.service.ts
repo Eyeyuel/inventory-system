@@ -17,7 +17,6 @@ export class UsersService {
       return user;
     } catch (error) {
       handleRpcException(error, 'Login failed');
-
     }
   }
 
@@ -27,7 +26,14 @@ export class UsersService {
       return user;
     } catch (error) {
       handleRpcException(error, 'Signup failed');
-
+    }
+  }
+  refresh(refreshToken: string) {
+    try {
+      const bothTokens = this.usersClient.send(USER_CMD.REFRESH, { refreshToken });
+      return bothTokens;
+    } catch (error) {
+      handleRpcException(error, 'Refresh Token failed');
     }
   }
 }
