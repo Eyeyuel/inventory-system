@@ -2,12 +2,12 @@ import { Module } from '@nestjs/common';
 import { StockService } from './stock.service';
 import { StockController } from './stock.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Stock } from './entities/stock.entity';
-import { Location } from '../location/entities/location.entity';
-import { Product } from '../product/entities/product.entity';
+import { Stock } from '@inventory-system/entities';
+import { Location } from '@inventory-system/entities';
+import { Product } from '@inventory-system/entities';
 import { ProductModule } from '../product/product.module';
 import { LocationModule } from '../location/location.module';
-import { StockMovement } from '../stockMovement/entities/stock-movement.entity';
+import { StockMovement } from '@inventory-system/entities';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Stock, Location, Product, StockMovement]), LocationModule, ProductModule],

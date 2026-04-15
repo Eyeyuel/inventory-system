@@ -10,14 +10,14 @@ export class ProfileController {
 
   @MessagePattern(PROFILE_CMD.UPDATE)
   updateProfile(
-    @Payload() payload: { userId: number; updateProfileDto: UpdateProfileDto },
+    @Payload() payload: { userId: string; updateProfileDto: UpdateProfileDto },
   ) {
     const { userId, updateProfileDto } = payload;
     return this.profileService.updateProfile(userId, updateProfileDto);
   }
 
   @MessagePattern(PROFILE_CMD.GET)
-  getProfile(@Payload() userId: number) {
+  getProfile(@Payload() userId: string) {
     return this.profileService.getProfile(userId);
   }
 }

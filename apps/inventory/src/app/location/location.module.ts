@@ -2,8 +2,8 @@ import { Module } from '@nestjs/common';
 import { LocationService } from './location.service';
 import { LocationController } from './location.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Location } from './entities/location.entity';
-import { Stock } from '../stock/entities/stock.entity';
+import { Location } from '@inventory-system/entities';
+import { Stock } from '@inventory-system/entities';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Location, Stock])],

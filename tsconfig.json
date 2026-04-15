@@ -23,6 +23,18 @@
     },
     {
       "path": "./shared/constants"
+    },
+    {
+      "path": "./apps/purchase"
+    },
+    {
+      "path": "./apps/sales"
+    },
+    {
+      "path": "./apps/web"
+    },
+    {
+      "path": "./shared/entities"
     }
   ]
 }

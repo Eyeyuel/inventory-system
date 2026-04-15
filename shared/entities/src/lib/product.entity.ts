@@ -1,6 +1,7 @@
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { Stock } from "../../stock/entities/stock.entity";
-import { Category } from "../../category/entities/category.entity";
+import { Category } from "./category.entity";
+import { Stock } from "./stock.entity";
+
 
 @Entity()
 export class Product {

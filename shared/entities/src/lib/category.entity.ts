@@ -7,7 +7,7 @@ import {
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from 'typeorm';
-import { Product } from '../../product/entities/product.entity';
+import { Product } from './product.entity';
 @Entity()
 export class Category {
     @PrimaryGeneratedColumn('uuid')

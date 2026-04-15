@@ -1,13 +1,10 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
-import { Between, DataSource, FindOptionsWhere, QueryRunner } from 'typeorm';
-import { AdjustStockDto, GetStockMovementsQueryDto, GetStocksQueryDto, ReceiveStockDto, ShipStockDto, StockMovementResponseDto, StockMovementSummaryDto, TransferStockDto } from '@inventory-system/dto';
-import { Stock } from '../stock/entities/stock.entity';
-import { StockMovement } from '../stockMovement/entities/stock-movement.entity';
-import { RpcException } from '@nestjs/microservices';
-import { Product } from '../product/entities/product.entity';
-import { Location } from '../location/entities/location.entity';
 import { handleRpcException } from '@inventory-system/constants';
+import { AdjustStockDto, GetStockMovementsQueryDto, GetStocksQueryDto, ReceiveStockDto, ShipStockDto, StockMovementResponseDto, StockMovementSummaryDto, TransferStockDto } from '@inventory-system/dto';
+import { Location, Product, Stock, StockMovement } from '@inventory-system/entities';
 import { StockMovementReasonsTypeForAdjust, StockMovementType } from '@inventory-system/types';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { RpcException } from '@nestjs/microservices';
+import { Between, DataSource, FindOptionsWhere } from 'typeorm';
 
 @Injectable()
 export class StockService {

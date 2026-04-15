@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Category } from './entities/category.entity';
+import { Category } from '@inventory-system/entities';
 import { CreateCategoryDto, UpdateCategoryDto } from '@inventory-system/dto';
 import { RpcException } from '@nestjs/microservices';
 import { handleRpcException } from '@inventory-system/constants';

@@ -55,3 +55,7 @@ export const INVENTORY_CMD = {
   UPDATE: { cmd: "update_inventory" },
   DELETE: { cmd: "delete_inventory" },
 };
+
+export const PURCHASE_ORDER_CMD = {
+  CREATE: { cmd: "create_purchase_order" },
+};

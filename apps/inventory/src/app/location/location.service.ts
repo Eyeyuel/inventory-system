@@ -1,7 +1,7 @@
 import { CreateLocationDto, UpdateLocationDto } from '@inventory-system/dto';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Location } from './entities/location.entity';
+import { Location } from '@inventory-system/entities';
 import { Repository } from 'typeorm';
 import { RpcException } from '@nestjs/microservices';
 import { handleRpcException } from '@inventory-system/constants';

@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn } from 'typeorm';
-import { Stock } from '../../stock/entities/stock.entity';
 import { StockMovementType } from '@inventory-system/types';
+import { Stock } from './stock.entity';
 
 @Entity()
 export class StockMovement {

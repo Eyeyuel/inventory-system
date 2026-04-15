@@ -27,6 +27,9 @@
   ],
   "references": [
     {
+      "path": "../../shared/entities/tsconfig.lib.json"
+    },
+    {
       "path": "../../shared/dto/tsconfig.lib.json"
     },
     {

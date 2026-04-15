@@ -8,7 +8,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { Profile } from "../../profile/entities/profile.entity";
+import { Profile } from "./profile.entity";
 
 @Entity()
 export class User {

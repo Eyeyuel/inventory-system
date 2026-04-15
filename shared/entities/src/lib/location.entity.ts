@@ -1,5 +1,5 @@
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm"
-import { Stock } from "../../stock/entities/stock.entity";
+import { Stock } from "./stock.entity";
 @Entity()
 export class Location {
     @PrimaryGeneratedColumn('uuid')

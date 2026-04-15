@@ -4,7 +4,7 @@ import { UsersService } from "../users/users.service";
 import { RpcException } from "@nestjs/microservices";
 import { JwtService } from "@nestjs/jwt";
 import bcrypt from "bcrypt";
-import { User } from "./entities/user.entity";
+import { User } from "@inventory-system/entities";
 import { ConfigService } from "@nestjs/config";
 import { handleRpcException } from "@inventory-system/constants";
 

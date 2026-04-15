@@ -1,11 +1,11 @@
-import { Injectable } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { QueryFailedError, Repository } from "typeorm";
-import { User } from "../auth/entities/user.entity";
-import { RpcException } from "@nestjs/microservices";
-import { SignUpDto } from "@inventory-system/dto";
-import * as bcrypt from "bcrypt";
 import { handleRpcException } from "@inventory-system/constants";
+import { SignUpDto } from "@inventory-system/dto";
+import { User } from "@inventory-system/entities";
+import { Injectable } from "@nestjs/common";
+import { RpcException } from "@nestjs/microservices";
+import { InjectRepository } from "@nestjs/typeorm";
+import * as bcrypt from "bcrypt";
+import { Repository } from "typeorm";
 
 @Injectable()
 export class UsersService {

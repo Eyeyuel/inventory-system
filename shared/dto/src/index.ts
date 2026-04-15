@@ -7,3 +7,5 @@ export * from "./lib/profile.dto";
 export * from "./lib/location.dto";
 export * from "./lib/stock.dto";
 export * from "./lib/stock-movement.dto";
+export * from "./lib/purchaseOrder.dto";
+export * from "./lib/purchaseOrderItem.dto";

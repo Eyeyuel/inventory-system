@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Profile } from "./entities/profile.entity";
+import { Profile } from '@inventory-system/entities';
 import { Repository } from "typeorm";
 import { UpdateProfileDto } from "@inventory-system/dto";
 import { RpcException } from "@nestjs/microservices";
@@ -10,7 +10,7 @@ export class ProfileService {
   constructor(
     @InjectRepository(Profile) private profileRepository: Repository<Profile>,
   ) { }
-  async getProfile(userId: number) {
+  async getProfile(userId: string) {
     try {
       const profile = await this.profileRepository.findOne({
         where: { user: { id: userId } },
@@ -29,7 +29,7 @@ export class ProfileService {
     }
   }
 
-  async updateProfile(userId: number, updateProfileDto: UpdateProfileDto) {
+  async updateProfile(userId: string, updateProfileDto: UpdateProfileDto) {
 
     try {
       // Find profile by the user ID

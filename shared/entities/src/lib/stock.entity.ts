@@ -1,7 +1,8 @@
 import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { Product } from "../../product/entities/product.entity";
-import { Location } from "../../location/entities/location.entity";
-import { StockMovement } from "../../stockMovement/entities/stock-movement.entity";
+import { Product } from "./product.entity";
+import { Location } from "./location.entity";
+import { StockMovement } from "./stock-movement.entity";
+
 @Entity()
 export class Stock {
     @PrimaryGeneratedColumn("uuid")

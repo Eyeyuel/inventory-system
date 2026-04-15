@@ -4,7 +4,7 @@ import { RpcException } from '@nestjs/microservices';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CategoryService } from '../category/category.service';
-import { Product } from './entities/product.entity';
+import { Product } from '@inventory-system/entities';
 import { handleRpcException } from '@inventory-system/constants';
 
 
