@@ -37,6 +37,14 @@ export class ReceiveStockDto {
     @IsEnum(StockMovementReasonsTypeForReceive)
     reasonCode!: StockMovementReasonsTypeForReceive;
 
+    @ApiProperty({
+        description: 'Purchase order item ID (required if reason is purchase_receipt)',
+        example: '123e4567-e89b-12d3-a456-426614174002',
+    })
+    @IsUUID()
+    @IsOptional()  // Not required if reason is not purchase_receipt
+    purchaseOrderItemId?: string;  // ← links to PO item
+
     @ApiPropertyOptional({
         description: 'Additional reason details',
         example: 'Received from supplier ABC',

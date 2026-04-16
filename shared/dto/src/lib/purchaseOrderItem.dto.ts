@@ -1,5 +1,4 @@
-import { Type } from "class-transformer";
-import { IsDecimal, IsNumber, IsUUID } from "class-validator";
+import { IsNumber, IsUUID, Min } from "class-validator";
 
 export class PurchaseOrderItemDto {
     @IsUUID()
@@ -10,9 +9,11 @@ export class PurchaseOrderItemDto {
 
     // @IsDecimal({ decimal_digits: '0,0' })
     @IsNumber()
+    @Min(1)  // quantityOrdered must be at least 1
     quantityOrdered!: number;
 
     @IsNumber()
+    @Min(0)  // unitCost cannot be negative
     unitCost!: number;
 }
 

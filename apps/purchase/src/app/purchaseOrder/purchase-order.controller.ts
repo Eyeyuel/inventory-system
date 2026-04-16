@@ -14,10 +14,10 @@ export class PurchaseOrderController {
     return this.purchaseOrderService.create(payload.createPurchaseOrderDto, payload.userId);
   }
 
-  // @MessagePattern('findAllPurchaseOrder')
-  // findAll() {
-  //   return this.purchaseOrderService.findAll();
-  // }
+  @MessagePattern(PURCHASE_ORDER_CMD.FIND)
+  findAll(@Payload() payload: { userId: string }) {
+    return this.purchaseOrderService.findAll(payload.userId);
+  }
 
   // @MessagePattern('findOnePurchaseOrder')
   // findOne(@Payload() id: number) {

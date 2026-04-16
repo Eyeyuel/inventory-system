@@ -1,8 +1,8 @@
 import { handleRpcException } from '@inventory-system/constants';
 import { AdjustStockDto, GetStockMovementsQueryDto, GetStocksQueryDto, ReceiveStockDto, ShipStockDto, StockMovementResponseDto, StockMovementSummaryDto, TransferStockDto } from '@inventory-system/dto';
-import { Location, Product, Stock, StockMovement } from '@inventory-system/entities';
+import { Location, Product, PurchaseOrder, PurchaseOrderItem, Stock, StockMovement } from '@inventory-system/entities';
 import { StockMovementReasonsTypeForAdjust, StockMovementType } from '@inventory-system/types';
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, HttpCode, HttpException, Injectable } from '@nestjs/common';
 import { RpcException } from '@nestjs/microservices';
 import { Between, DataSource, FindOptionsWhere } from 'typeorm';
 
@@ -91,6 +91,8 @@ export class StockService {
       const movementRepo = queryRunner.manager.getRepository(StockMovement);
       const productRepo = queryRunner.manager.getRepository(Product);
       const locationRepo = queryRunner.manager.getRepository(Location);
+      const purchaseOrderRepo = queryRunner.manager.getRepository(PurchaseOrder);
+      const purchaseOrderItemRepo = queryRunner.manager.getRepository(PurchaseOrderItem);
 
       // 1. Validate product ownership
       const product = await productRepo.findOneBy({ id: reciveStockDto.productId, user: userId });
@@ -123,6 +125,74 @@ export class StockService {
 
       if (reciveStockDto.reasonCode === 'opening_stock' && !isNewStock) {
         throw new RpcException({ statusCode: 400, message: 'Opening stock can only be set on the first movement for a product-location' });
+      }
+
+      // this is for Purchase Order receiving
+      if (reciveStockDto.reasonCode === 'purchase_receipt') {
+
+        if (reciveStockDto.purchaseOrderItemId) {
+          // maybe get the whole purchase order and cascade the changes
+          const poItem = await purchaseOrderItemRepo.findOne({
+            where: { id: reciveStockDto.purchaseOrderItemId },
+            relations: { purchaseOrder: true }, select: { purchaseOrder: { id: true } }
+          });
+          if (!poItem) {
+            throw new RpcException({ statusCode: 400, message: 'Purchase order item not found' });
+          }
+
+          const beforeQty = stock.quantity;
+          const newQty = poItem.quantityReceived + reciveStockDto.quantity;
+          if (poItem.quantityOrdered === poItem.quantityReceived) {
+            throw new HttpException({
+              "message": "Purchase order item has already been fully received. Cannot receive more.",
+            }, 400);
+          }
+          if (newQty > poItem.quantityOrdered) {
+            throw new BadRequestException('Quantuty recived is more then orderd quanity.');
+          }
+
+          // save stock with the correct stock quantity
+          stock.quantity = stock.quantity + reciveStockDto.quantity;
+          stock.user = userId;
+          const stockResponse = await stockRepo.save(stock);
+
+
+          // update the POI with the new quantity
+          const updatedPOI = purchaseOrderItemRepo.create({
+            ...poItem, quantityReceived: poItem.quantityReceived + reciveStockDto.quantity
+          })
+          const POIResponse = await purchaseOrderItemRepo.save(updatedPOI)
+
+          const mainPO = await purchaseOrderRepo.findOneBy({ id: poItem.purchaseOrder.id });
+          if (mainPO) {
+            // check if all items are received and update the PO status to received
+            const allItems = await purchaseOrderItemRepo.findBy({ purchaseOrder: { id: mainPO.id } });
+            const allReceived = allItems.every(item => item.quantityOrdered === item.quantityReceived);
+            if (allReceived) {
+              mainPO.status = 'received';
+              mainPO.receivedDate = new Date();
+              await purchaseOrderRepo.save(mainPO);
+            }
+          }
+
+          const movement = movementRepo.create({
+            type: StockMovementType.RECEIVE,
+            quantityChange: reciveStockDto.quantity,
+            beforeQuantity: beforeQty,
+            afterQuantity: stock.quantity,
+            referenceId: reciveStockDto.referenceId,
+            reason: reciveStockDto.reasonCode,
+            user: userId,
+            stock,
+          });
+          const movementresponse = await movementRepo.save(movement);
+
+          await queryRunner.commitTransaction();
+
+          return { POIResponse, stockResponse, movementresponse };
+        } else {
+          throw new RpcException({ statusCode: 400, message: 'purchaseOrderItemId is needed to update purchase order' });
+        }
       }
 
       const beforeQty = stock.quantity;

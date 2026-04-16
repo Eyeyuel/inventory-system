@@ -58,4 +58,5 @@ export const INVENTORY_CMD = {
 
 export const PURCHASE_ORDER_CMD = {
   CREATE: { cmd: "create_purchase_order" },
+  FIND: { cmd: "find_all_purchase_orders" },
 };

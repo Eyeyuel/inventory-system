@@ -10,9 +10,9 @@ export class PurchaseService {
     return this.purchaseOrderClient.send(PURCHASE_ORDER_CMD.CREATE, { createPurchaseOrderDto, userId });
   }
 
-  // findAll() {
-  //   return `This action returns all purchase`;
-  // }
+  findAll(userId: string) {
+    return this.purchaseOrderClient.send(PURCHASE_ORDER_CMD.FIND, { userId });
+  }
 
   // findOne(id: number) {
   //   return `This action returns a #${id} purchase`;

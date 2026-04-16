@@ -53,7 +53,8 @@ export class ProductService {
         where: {
           id: id,
           user: userId
-        }, relations: ['category', 'stocks']
+        }, relations: { category: true, stocks: { location: true } },
+        select: { category: { id: true, name: true }, stocks: { id: true, quantity: true, location: { id: true, name: true } } }
       })
 
       if (!product) {

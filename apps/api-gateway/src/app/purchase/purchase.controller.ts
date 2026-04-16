@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { PurchaseService } from './purchase.service';
 import { CreatePurchaseOrderDto } from '@inventory-system/dto';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
@@ -12,10 +12,10 @@ export class PurchaseController {
     return this.purchaseService.create(createPurchaseDto, user.sub);
   }
 
-  // @Get()
-  // findAll() {
-  //   return this.purchaseService.findAll();
-  // }
+  @Get()
+  findAll(@CurrentUser() user: { sub: string }) {
+    return this.purchaseService.findAll(user.sub);
+  }
 
   // @Get(':id')
   // findOne(@Param('id') id: string) {

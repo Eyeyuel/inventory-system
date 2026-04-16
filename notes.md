@@ -3,7 +3,7 @@
 /////////////////////////// order service ///////////////////////
 /////////////////////////// run the project in docker ///////////////////////
 /////////////////////////// OAuth otp ///////////////////////
-////////////filtering response like by date and other things searching things too//////////////
+////////////filtering response like by date and other things searching things too pagination//////////////
 
 product (name) should be uniqe ???
 SKU when product is added??

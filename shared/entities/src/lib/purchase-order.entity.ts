@@ -27,7 +27,7 @@ export class PurchaseOrder {
 
     // @ManyToOne(() => Supplier)
     // supplier!: Supplier;
-    @Column({ type: 'string' })
+    @Column()
     supplier!: string;
 
     @OneToMany(() => PurchaseOrderItem, item => item.purchaseOrder, { cascade: true })
