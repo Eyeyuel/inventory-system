@@ -1,5 +1,5 @@
 import { IsUUID, IsInt, Min, IsString, IsOptional, IsIn, Max, IsDateString, IsEnum, IsNotEmpty } from 'class-validator';
-import { StockMovementReasonsTypeForAdjust, StockMovementReasonsTypeForReceive, StockMovementType } from '@inventory-system/types';
+import { StockMovementReasonsTypeForAdjust, StockMovementReasonsTypeForReceive, StockMovementReasonsTypeForShip, StockMovementType } from '@inventory-system/types';
 import { Type } from 'class-transformer';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
@@ -87,12 +87,19 @@ export class ShipStockDto {
 
     @ApiProperty({
         description: 'Reason code for shipping',
-        enum: ['sale', 'transfer_out', 'sample', 'damage_disposal', 'adjustment_out'],
-        example: 'sale',
+        enum: StockMovementReasonsTypeForShip,
+        example: StockMovementReasonsTypeForShip.SALE,
     })
-    @IsString()
-    @IsIn(['sale', 'transfer_out', 'sample', 'damage_disposal', 'adjustment_out'])
-    reasonCode!: string;
+    @IsEnum(StockMovementReasonsTypeForShip)
+    reasonCode!: StockMovementReasonsTypeForShip;
+
+    @ApiProperty({
+        description: 'sales order item ID (required if reason is sale)',
+        example: '123e4567-e89b-12d3-a456-426614174002',
+    })
+    @IsUUID()
+    @IsOptional()  // Not required if reason is not purchase_receipt
+    salesOrderItemId?: string;  // ← links to PO item
 
     @ApiPropertyOptional({ description: 'Additional reason text', example: 'Customer return' })
     @IsOptional()

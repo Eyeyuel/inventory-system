@@ -1,7 +1,7 @@
 import { handleRpcException } from '@inventory-system/constants';
 import { AdjustStockDto, GetStockMovementsQueryDto, GetStocksQueryDto, ReceiveStockDto, ShipStockDto, StockMovementResponseDto, StockMovementSummaryDto, TransferStockDto } from '@inventory-system/dto';
-import { Location, Product, PurchaseOrder, PurchaseOrderItem, Stock, StockMovement } from '@inventory-system/entities';
-import { StockMovementReasonsTypeForAdjust, StockMovementType } from '@inventory-system/types';
+import { Location, Product, PurchaseOrder, PurchaseOrderItem, SalesOrder, SalesOrderItem, Stock, StockMovement } from '@inventory-system/entities';
+import { PurchaseOrderStatusType, SalesOrderStatusType, StockMovementReasonsTypeForAdjust, StockMovementType } from '@inventory-system/types';
 import { BadRequestException, HttpCode, HttpException, Injectable } from '@nestjs/common';
 import { RpcException } from '@nestjs/microservices';
 import { Between, DataSource, FindOptionsWhere } from 'typeorm';
@@ -169,7 +169,7 @@ export class StockService {
             const allItems = await purchaseOrderItemRepo.findBy({ purchaseOrder: { id: mainPO.id } });
             const allReceived = allItems.every(item => item.quantityOrdered === item.quantityReceived);
             if (allReceived) {
-              mainPO.status = 'received';
+              mainPO.status = PurchaseOrderStatusType.RECEIVED;
               mainPO.receivedDate = new Date();
               await purchaseOrderRepo.save(mainPO);
             }
@@ -237,6 +237,8 @@ export class StockService {
       const movementRepo = queryRunner.manager.getRepository(StockMovement);
       const productRepo = queryRunner.manager.getRepository(Product);
       const locationRepo = queryRunner.manager.getRepository(Location);
+      const salesOrderRepo = queryRunner.manager.getRepository(SalesOrder);
+      const salesOrderItemRepo = queryRunner.manager.getRepository(SalesOrderItem);
 
       // 1. Validate product ownership
       const product = await productRepo.findOneBy({ id: shipStockDto.productId, user: userId });
@@ -263,22 +265,86 @@ export class StockService {
         throw new RpcException({ statusCode: 400, message: 'Stock not found' });
       }
 
-      // const stock = existingStock ?? stockRepo.create({
-      //   product: { id: shipStockDto.productId },
-      //   location: { id: shipStockDto.locationId },
-      //   quantity: 0,
-      //   user: userId,
-      // });
-      // const isNewStock = !existingStock;
-
-      // if (shipStockDto.reasonCode === 'opening_stock' && !isNewStock) {
-      //   throw new RpcException({ statusCode: 400, message: 'Opening stock can only be set on the first movement for a product-location' });
-      // }
-
+      // 4. Validate quantity and update
       const beforeQty = stock.quantity;
       const newQty = beforeQty - shipStockDto.quantity;
       if (newQty < 0) {
         throw new BadRequestException(`Insufficient stock at ${stock.location?.name || 'location'}`);
+      }
+
+      if (shipStockDto.reasonCode === 'sale') {
+
+        if (shipStockDto.salesOrderItemId) {
+          // maybe get the whole sales order and cascade the changes
+          const soItem = await salesOrderItemRepo.findOne({
+            where: { id: shipStockDto.salesOrderItemId },
+            relations: { salesOrder: true }, select: { salesOrder: { id: true } }
+          });
+          if (!soItem) {
+            throw new RpcException({ statusCode: 400, message: 'Sales order item not found' });
+          }
+
+          const beforeQty = stock.quantity;
+          // this is not for stock
+          const newQty = soItem.quantityShipped + shipStockDto.quantity;
+          if (soItem.quantityOrdered === soItem.quantityShipped) {
+            throw new HttpException({
+              "message": "Sales order item has already been fully shipped. Cannot ship more.",
+            }, 400);
+          }
+          if (newQty > soItem.quantityOrdered) {
+            throw new BadRequestException(`Quantity ${newQty} is more than ordered quantity ${soItem.quantityOrdered}.`);
+          }
+
+          // save stock with the correct stock quantity
+          // when the sales order is created it already checked the available quanityt on stock and sales order quantity when requested
+          stock.quantity = stock.quantity - shipStockDto.quantity;
+          stock.user = userId;
+          const stockResponse = await stockRepo.save(stock);
+
+
+          // update the SOI with the new quantity
+          const updatedSOI = salesOrderItemRepo.create({
+            ...soItem, quantityShipped: soItem.quantityShipped + shipStockDto.quantity
+          })
+          const SOIResponse = await salesOrderItemRepo.save(updatedSOI)
+
+          const mainSO = await salesOrderRepo.findOneBy({ id: soItem.salesOrder.id });
+          if (mainSO) {
+            // check if all items are received and update the SO status to received
+            const allItems = await salesOrderItemRepo.findBy({ salesOrder: { id: mainSO.id } });
+            const allShipped = allItems.every(item => item.quantityOrdered === item.quantityShipped);
+            const partiallyShipped = allItems.some(item => item.quantityOrdered > item.quantityShipped && item.quantityShipped > 0);
+            if (allShipped) {
+              mainSO.status = SalesOrderStatusType.SHIPPED;
+              mainSO.shippedDate = new Date();
+              await salesOrderRepo.save(mainSO);
+            }
+            if (partiallyShipped) {
+              mainSO.status = SalesOrderStatusType.PARTIALLY_SHIPPED;
+              mainSO.shippedDate = new Date();
+              await salesOrderRepo.save(mainSO);
+            }
+          }
+
+          const movement = movementRepo.create({
+            type: StockMovementType.SHIP,
+            quantityChange: shipStockDto.quantity,
+            beforeQuantity: beforeQty,
+            afterQuantity: stock.quantity,
+            referenceId: shipStockDto.referenceId,
+            reason: shipStockDto.reasonCode,
+            user: userId,
+            stock,
+          });
+          const movementresponse = await movementRepo.save(movement);
+
+          await queryRunner.commitTransaction();
+
+          return { SOIResponse, stockResponse, movementresponse };
+        } else {
+          throw new RpcException({ statusCode: 400, message: 'salesOrderItemId is needed to update sales order' });
+        }
       }
 
       stock.quantity = newQty;

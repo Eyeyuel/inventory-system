@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { SalesOrder } from './sales-order.entity';
 
 @Entity()
@@ -26,4 +26,10 @@ export class SalesOrderItem {
 
     @Column({ type: 'text', nullable: true })
     description?: string;
+
+    @CreateDateColumn()
+    createdAt?: Date
+
+    @UpdateDateColumn()
+    updatedAt?: Date
 }

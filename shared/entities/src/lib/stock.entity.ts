@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Product } from "./product.entity";
 import { Location } from "./location.entity";
 import { StockMovement } from "./stock-movement.entity";
@@ -24,6 +24,15 @@ export class Stock {
 
     @OneToMany(() => StockMovement, (stockMovement) => stockMovement.stock)
     stockMovements?: StockMovement[]
+
+    @CreateDateColumn()
+    createdAt?: Date
+
+    @UpdateDateColumn()
+    updatedAt?: Date
+
+    @DeleteDateColumn()
+    deletedAt?: Date
 
 }
 
