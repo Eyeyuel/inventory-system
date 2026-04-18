@@ -9,3 +9,5 @@ export * from "./lib/stock.dto";
 export * from "./lib/stock-movement.dto";
 export * from "./lib/purchaseOrder.dto";
 export * from "./lib/purchaseOrderItem.dto";
+export * from "./lib/salesOrder.dto";
+export * from "./lib/salesOrderItem.dto";

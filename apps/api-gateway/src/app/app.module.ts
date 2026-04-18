@@ -12,6 +12,7 @@ import { StockModule } from './stock/stock.module';
 import { APP_GUARD } from "@nestjs/core";
 import { AuthGuard } from "./guards/auth.guard";
 import { PurchaseModule } from './purchase/purchase.module';
+import { SalesModule } from './sales/sales.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { PurchaseModule } from './purchase/purchase.module';
     LocationModule,
     StockModule,
     PurchaseModule,
+    SalesModule,
   ],
   controllers: [AppController],
   providers: [AppService, {

@@ -31,9 +31,6 @@
       "path": "./apps/sales"
     },
     {
-      "path": "./apps/web"
-    },
-    {
       "path": "./shared/entities"
     }
   ]

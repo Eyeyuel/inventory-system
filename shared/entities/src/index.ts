@@ -7,4 +7,6 @@ export * from './lib/stock-movement.entity';
 export * from './lib/user.entity';
 export * from './lib/purchase-order.entity';
 export * from './lib/purchase-order-item.entity';
+export * from './lib/sales-order.entity';
+export * from './lib/sales-order-item.entity';
 

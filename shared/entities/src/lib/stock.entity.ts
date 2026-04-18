@@ -20,7 +20,7 @@ export class Stock {
 
     //many to one : many stocks can belong to one location
     @ManyToOne(() => Location, (location) => location.stocks)
-    location?: Location
+    location!: Location
 
     @OneToMany(() => StockMovement, (stockMovement) => stockMovement.stock)
     stockMovements?: StockMovement[]

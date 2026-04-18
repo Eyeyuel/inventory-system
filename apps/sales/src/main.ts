@@ -11,7 +11,7 @@ async function bootstrap() {
     transport: Transport.RMQ,
     options: {
       urls: [configService.get<string>("RABBITMQ_URL") || "amqp://localhost:5672"],
-      queue: configService.get<string>("SALES_QUEUE") || "sales_queue",
+      queue: configService.get<string>("SALES_ORDERS_QUEUE") || "sales_orders_queue",
       queueOptions: {
         durable: false,
       },

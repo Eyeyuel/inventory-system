@@ -1,6 +1,6 @@
 import { handleRpcException } from '@inventory-system/constants';
 import { CreatePurchaseOrderDto } from '@inventory-system/dto';
-import { Location, Product, PurchaseOrder, PurchaseOrderItem, Stock, StockMovement } from '@inventory-system/entities';
+import { Location, Product, PurchaseOrder, PurchaseOrderItem } from '@inventory-system/entities';
 import { Injectable } from '@nestjs/common';
 import { RpcException } from '@nestjs/microservices';
 import { DataSource, In, Like } from 'typeorm';
@@ -17,8 +17,8 @@ export class PurchaseOrderService {
     try {
       const productRepo = queryRunner.manager.getRepository(Product);
       const locationRepo = queryRunner.manager.getRepository(Location);
-      const stockRepo = queryRunner.manager.getRepository(Stock);
-      const movementRepo = queryRunner.manager.getRepository(StockMovement);
+      // const stockRepo = queryRunner.manager.getRepository(Stock);
+      // const movementRepo = queryRunner.manager.getRepository(StockMovement);
       const purchaseOrderRepo = queryRunner.manager.getRepository(PurchaseOrder);
       const purchaseOrderItemRepo = queryRunner.manager.getRepository(PurchaseOrderItem);
 

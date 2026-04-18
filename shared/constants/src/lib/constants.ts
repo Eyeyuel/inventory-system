@@ -60,3 +60,8 @@ export const PURCHASE_ORDER_CMD = {
   CREATE: { cmd: "create_purchase_order" },
   FIND: { cmd: "find_all_purchase_orders" },
 };
+
+export const SALES_ORDER_CMD = {
+  CREATE: { cmd: "create_sales_order" },
+  FIND: { cmd: "find_all_sales_orders" },
+};
