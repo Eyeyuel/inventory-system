@@ -18,7 +18,6 @@ import { ProductResponseDto } from '@inventory-system/dto';
 
 @ApiTags('Products')
 @ApiBearerAuth()
-@UseGuards(AuthGuard)
 @Controller('product')
 export class ProductController {
   constructor(private readonly productService: ProductService) { }
