@@ -1,0 +1,40 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compileOnSave": false,
+  "files": [],
+  "references": [
+    {
+      "path": "./apps/user"
+    },
+    {
+      "path": "./apps/product"
+    },
+    {
+      "path": "./apps/inventory"
+    },
+    {
+      "path": "./shared/types"
+    },
+    {
+      "path": "./shared/dto"
+    },
+    {
+      "path": "./apps/api-gateway"
+    },
+    {
+      "path": "./shared/constants"
+    },
+    {
+      "path": "./apps/purchase"
+    },
+    {
+      "path": "./apps/sales"
+    },
+    {
+      "path": "./shared/entities"
+    },
+    {
+      "path": "./apps/web"
+    }
+  ]
+}
