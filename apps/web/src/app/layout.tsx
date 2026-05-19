@@ -2,6 +2,7 @@ import './global.css';
 import { JetBrains_Mono } from 'next/font/google';
 import { cn } from '@/lib/utils';
 import { ThemeProvider } from '@/components/theme-provider';
+import { TanstackProvider } from '@/components/providers/tanstack-provider';
 
 const jetbrainsMono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-mono' });
 
@@ -20,7 +21,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <TanstackProvider>{children}</TanstackProvider>
         </ThemeProvider>
       </body>
     </html>

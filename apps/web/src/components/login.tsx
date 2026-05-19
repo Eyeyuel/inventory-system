@@ -1,14 +1,20 @@
+'use client';
 import { LogoIcon } from '@/components/logo';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { login, LoginState } from '@/services/client/user';
 import Link from 'next/link';
+import { useActionState } from 'react';
+import { Alert, AlertDescription } from './ui/alert';
 
 export default function Login() {
+  const initialState: LoginState = { message: '', errors: {}, values: undefined };
+  const [state, formAction, pending] = useActionState(login, initialState);
   return (
     <section className="flex min-h-screen bg-zinc-50 px-4 dark:bg-transparent">
       <form
-        action=""
+        action={formAction}
         className="bg-muted m-auto h-fit w-full max-w-sm overflow-hidden rounded-[calc(var(--radius)+.125rem)] border shadow-md shadow-zinc-950/5 dark:[--color-muted:var(--color-zinc-900)]"
       >
         <div className="bg-card -m-px rounded-[calc(var(--radius)+.125rem)] border p-8 pb-6">
@@ -23,14 +29,22 @@ export default function Login() {
           <div className="mt-6 space-y-6">
             <div className="space-y-2">
               <Label htmlFor="email" className="block text-sm">
-                Username
+                Email
               </Label>
-              <Input type="email" required name="email" id="email" />
+              <Input
+                type="email"
+                name="email"
+                id="email"
+                defaultValue={state?.values?.email ?? ''}
+              />
+              {state?.errors?.email && (
+                <p className="text-sm text-red-500">{state.errors.email[0]}</p>
+              )}
             </div>
 
             <div className="space-y-0.5">
               <div className="flex items-center justify-between">
-                <Label htmlFor="pwd" className="text-sm">
+                <Label htmlFor="password" className="text-sm">
                   Password
                 </Label>
                 <Button asChild variant="link" size="sm">
@@ -41,14 +55,32 @@ export default function Login() {
               </div>
               <Input
                 type="password"
-                required
-                name="pwd"
-                id="pwd"
+                name="password"
+                id="password"
+                defaultValue={state?.values?.password ?? ''}
                 className="input sz-md variant-mixed"
               />
+              {state?.errors?.password && (
+                <p className="text-sm text-red-500">{state.errors.password[0]}</p>
+              )}
             </div>
 
-            <Button className="w-full">Sign In</Button>
+            {state?.message && !pending && (
+              <Alert variant="destructive">
+                <AlertDescription>{state.message}</AlertDescription>
+              </Alert>
+            )}
+
+            <Button disabled={pending} className="w-full">
+              {pending ? (
+                <span className="flex items-center justify-center gap-2">
+                  <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                  Signing In...
+                </span>
+              ) : (
+                'Sign In'
+              )}
+            </Button>
           </div>
 
           <div className="my-6 grid grid-cols-[1fr_auto_1fr] items-center gap-3">
