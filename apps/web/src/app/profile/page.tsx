@@ -7,6 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { AlertCircle } from 'lucide-react';
+import { LogoutButton } from '@/components/logout';
 
 interface Profile {
   id: string;
@@ -99,6 +100,7 @@ export default function Dashboard() {
           </div>
         </CardContent>
       </Card>
+      <LogoutButton />
     </div>
   );
 }

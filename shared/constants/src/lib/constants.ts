@@ -21,6 +21,7 @@ export const PRODUCT_CMD = {
   FIND_ONE: { cmd: 'find_product' },
   UPDATE: { cmd: 'update_product' },
   DELETE: { cmd: 'delete_product' },
+  TOTAL: { cmd: 'total_products' },
 };
 
 export const CATEGORY_CMD = {
@@ -50,16 +51,19 @@ export const STOCK_CMD = {
   TRANSFER: { cmd: 'transfer_stock' },
   ADJUST: { cmd: 'adjust_stock' },
   FIND_MOVEMENTS: { cmd: 'find_movements' },
+  COUNT: { cmd: 'count_stock_movements' },
 };
 
 export const PURCHASE_ORDER_CMD = {
   CREATE: { cmd: 'create_purchase_order' },
   FIND: { cmd: 'find_all_purchase_orders' },
   FIND_ONE: { cmd: 'find_purchase_order' },
+  FIND_DRAFTS: { cmd: 'find_drafts' },
 };
 
 export const SALES_ORDER_CMD = {
   CREATE: { cmd: 'create_sales_order' },
   FIND: { cmd: 'find_all_sales_orders' },
   FIND_ONE: { cmd: 'find_sales_order' },
+  FIND_DRAFTS: { cmd: 'find_drafts' },
 };

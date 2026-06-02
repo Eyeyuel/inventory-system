@@ -2,19 +2,14 @@ import {
   AdjustStockDto,
   FindStockMovementsDto,
   FindStocksDto,
-  GetStockMovementsQueryDto,
   PaginatedStockMovementResponseDto,
   PaginatedStockResponseDto,
   ReceiveStockDto,
   ShipStockDto,
-  StockMovementResponseDto,
   StockMovementSummaryDto,
-  StockResponseDto,
   TransferStockDto,
 } from '@inventory-system/dto';
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
-import { CurrentUser } from '../common/decorators/current-user.decorator';
-import { StockService } from './stock.service';
 import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
@@ -24,7 +19,9 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { Throttle } from '@nestjs/throttler';
+import { CurrentUser } from '../common/decorators/current-user.decorator';
 import { THROTTLE_PRESETS } from '../common/throttle-presets';
+import { StockService } from './stock.service';
 
 @Controller('stock')
 export class StockController {
@@ -106,5 +103,14 @@ export class StockController {
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   adjust(@Body() adjustStockDto: AdjustStockDto, @CurrentUser() user: { sub: string }) {
     return this.stockService.adjust(adjustStockDto, user.sub);
+  }
+
+  @Throttle({ [THROTTLE_PRESETS.stock.name]: THROTTLE_PRESETS.stock })
+  @Get('movements/count')
+  @ApiOperation({ summary: 'Get count of stock movements' })
+  @ApiOkResponse({ description: 'Count retrieved successfully' })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  getCountStockMovements(@CurrentUser() user: { sub: string }) {
+    return this.stockService.getCountStockMovements(user.sub);
   }
 }

@@ -8,5 +8,5 @@ interface User {
 
 export const createUser = async (data: User) => {
   const response = await apiClient.post('/users', data);
-  console.log(response.data);
+  // console.log(response.data);
 };

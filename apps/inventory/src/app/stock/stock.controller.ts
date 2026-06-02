@@ -1,16 +1,15 @@
-import { Controller } from '@nestjs/common';
-import { StockService } from './stock.service';
 import { STOCK_CMD } from '@inventory-system/constants';
-import { MessagePattern, Payload } from '@nestjs/microservices';
 import {
   AdjustStockDto,
   FindStockMovementsDto,
   FindStocksDto,
-  GetStockMovementsQueryDto,
   ReceiveStockDto,
   ShipStockDto,
   TransferStockDto,
 } from '@inventory-system/dto';
+import { Controller } from '@nestjs/common';
+import { MessagePattern, Payload } from '@nestjs/microservices';
+import { StockService } from './stock.service';
 
 @Controller()
 export class StockController {
@@ -44,5 +43,10 @@ export class StockController {
   @MessagePattern(STOCK_CMD.ADJUST)
   adjust(@Payload() payload: { adjustStockDto: AdjustStockDto; userId: string }) {
     return this.stockService.adjust(payload.adjustStockDto, payload.userId);
+  }
+
+  @MessagePattern(STOCK_CMD.COUNT)
+  getCountStockMovements(@Payload() payload: { userId: string }) {
+    return this.stockService.getCountStockMovements(payload.userId);
   }
 }

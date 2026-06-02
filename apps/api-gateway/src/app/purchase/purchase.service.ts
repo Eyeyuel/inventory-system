@@ -23,6 +23,10 @@ export class PurchaseService {
     return this.purchaseOrderClient.send(PURCHASE_ORDER_CMD.FIND_ONE, { id, userId });
   }
 
+  findDrafts(userId: string) {
+    return this.purchaseOrderClient.send(PURCHASE_ORDER_CMD.FIND_DRAFTS, { userId });
+  }
+
   // findOne(id: number) {
   //   return `This action returns a #${id} purchase`;
   // }

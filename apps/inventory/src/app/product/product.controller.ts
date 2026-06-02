@@ -33,4 +33,9 @@ export class ProductController {
   remove(@Payload() payload: { id: string; userId: string }) {
     return this.productService.remove(payload.id, payload.userId);
   }
+
+  @MessagePattern(PRODUCT_CMD.TOTAL)
+  getTotalProducts(@Payload() payload: { userId: string }) {
+    return this.productService.getTotalProducts(payload.userId);
+  }
 }

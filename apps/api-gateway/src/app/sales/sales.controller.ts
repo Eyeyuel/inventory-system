@@ -48,6 +48,19 @@ export class SalesController {
   }
 
   @Throttle({ [THROTTLE_PRESETS.sales.name]: THROTTLE_PRESETS.sales })
+  @Get('drafts')
+  @ApiOperation({ summary: 'Get all draft sales orders' })
+  @ApiOkResponse({
+    description: 'Drafts Sales orders retrieved',
+    // type: PaginatedSalesOrderResponseDto,
+  })
+  @ApiNotFoundResponse({ description: 'No draft sales orders found' })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  findDrafts(@CurrentUser() user: { sub: string }) {
+    return this.salesService.findDrafts(user.sub);
+  }
+
+  @Throttle({ [THROTTLE_PRESETS.sales.name]: THROTTLE_PRESETS.sales })
   @Get(':id')
   @ApiOperation({ summary: 'Get a sales order by ID' })
   @ApiOkResponse({

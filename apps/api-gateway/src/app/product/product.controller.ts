@@ -52,6 +52,15 @@ export class ProductController {
     return this.productService.findAll(filters, user.sub);
   }
 
+  @Throttle({ [THROTTLE_PRESETS.product.write.name]: THROTTLE_PRESETS.product.write })
+  @Get('total')
+  @ApiOperation({ summary: 'Get total number of products' })
+  @ApiOkResponse({ description: 'Total count retrieved' })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  getTotalProducts(@CurrentUser() user: { sub: string }) {
+    return this.productService.getTotalProducts(user.sub);
+  }
+
   @Throttle({ [THROTTLE_PRESETS.product.read.name]: THROTTLE_PRESETS.product.read })
   @Get(':id')
   @ApiOperation({ summary: 'Get product by ID' })

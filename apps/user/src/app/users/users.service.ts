@@ -134,6 +134,7 @@ export class UsersService {
         },
       });
       const user = await this.userRepository.save(newUser);
+      console.log('[user]: ', user);
       return user;
     } catch (error) {
       handleRpcException(error, 'Database error while creating OAuth user');

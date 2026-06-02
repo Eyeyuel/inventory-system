@@ -186,4 +186,17 @@ export class ProductService {
       handleRpcException(error, 'Database error while deleting product');
     }
   }
+
+  async getTotalProducts(userId: string) {
+    try {
+      const count = await this.productRepository.count({
+        where: {
+          user: userId,
+        },
+      });
+      return { count };
+    } catch (error) {
+      handleRpcException(error, 'Database error while counting products');
+    }
+  }
 }

@@ -48,6 +48,19 @@ export class PurchaseController {
   }
 
   @Throttle({ [THROTTLE_PRESETS.purchase.name]: THROTTLE_PRESETS.purchase })
+  @Get('drafts')
+  @ApiOperation({ summary: 'Get draft purchase orders' })
+  @ApiOkResponse({
+    description: 'Draft purchase orders retrieved',
+    // type: PaginatedPurchaseOrderResponseDto,
+  })
+  @ApiNotFoundResponse({ description: 'No draft purchase orders found' })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  findDrafts(@CurrentUser() user: { sub: string }) {
+    return this.purchaseService.findDrafts(user.sub);
+  }
+
+  @Throttle({ [THROTTLE_PRESETS.purchase.name]: THROTTLE_PRESETS.purchase })
   @Get(':id')
   @ApiOperation({ summary: 'Get a specific purchase order' })
   @ApiOkResponse({

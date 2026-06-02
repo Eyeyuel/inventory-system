@@ -24,6 +24,11 @@ export class SalesOrderController {
     return this.salesOrderService.findOne(payload.id, payload.userId);
   }
 
+  @MessagePattern(SALES_ORDER_CMD.FIND_DRAFTS)
+  findDrafts(@Payload() payload: { userId: string }) {
+    return this.salesOrderService.findDrafts(payload.userId);
+  }
+
   // @MessagePattern('findOneSalesOrder')
   // findOne(@Payload() id: number) {
   //   return this.salesOrderService.findOne(id);

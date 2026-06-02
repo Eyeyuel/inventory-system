@@ -837,4 +837,18 @@ export class StockService {
       await queryRunner.release();
     }
   }
+
+  async getCountStockMovements(userId: string) {
+    try {
+      const count = await this.dataSource
+        .getRepository(StockMovement)
+        .createQueryBuilder('sm')
+        .where('sm.user = :userId', { userId })
+        .getCount();
+
+      return { count };
+    } catch (error) {
+      handleRpcException(error, 'Database error while counting stock movements');
+    }
+  }
 }

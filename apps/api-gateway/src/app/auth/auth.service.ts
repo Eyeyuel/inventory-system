@@ -18,6 +18,8 @@ export class AuthService {
   }
 
   generateToken(user: Partial<User>) {
-    return this.usersClient.send(USER_CMD.GENERATE_TOKENS_OAUTH_USER, user);
+    const result = this.usersClient.send(USER_CMD.GENERATE_TOKENS_OAUTH_USER, user);
+    console.log('[RESULT] ', result);
+    return result;
   }
 }

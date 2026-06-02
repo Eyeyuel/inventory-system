@@ -41,4 +41,8 @@ export class StockService {
   adjust(adjustStockDto: AdjustStockDto, userId: string) {
     return this.inventoryClient.send(STOCK_CMD.ADJUST, { adjustStockDto, userId });
   }
+
+  getCountStockMovements(userId: string) {
+    return this.inventoryClient.send(STOCK_CMD.COUNT, { userId });
+  }
 }

@@ -172,22 +172,15 @@ export class PurchaseOrderService {
     }
   }
 
-  // async findAll(userId: string) {
-  //   try {
-  //     const purchaseOrders = await this.dataSource.getRepository(PurchaseOrder).find({
-  //       where: {
-  //         user: userId
-  //       }, relations: ['items']
-  //     });
-  //     if (!purchaseOrders) {
-  //       throw new RpcException({
-  //         statusCode: 404,
-  //         message: "Purchase Orders not found",
-  //       })
-  //     }
-  //     return purchaseOrders;
-  //   } catch (error) {
-  //     handleRpcException(error, "Database error while getting purchase orders");
-  //   }
-  // }
+  async findDrafts(userId: string) {
+    try {
+      const purchaseOrderDraftCount = await this.dataSource.getRepository(PurchaseOrder).count({
+        where: { user: userId, status: 'draft' },
+        // relations: ['items'],
+      });
+      return { count: purchaseOrderDraftCount };
+    } catch (error) {
+      handleRpcException(error, 'Database error while fetching draft purchase orders');
+    }
+  }
 }

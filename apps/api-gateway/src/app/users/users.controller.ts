@@ -6,7 +6,16 @@ import {
   VerifyEmailResponseDto,
   ResetPasswordDto,
 } from '@inventory-system/dto';
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Req,
+  UnauthorizedException,
+} from '@nestjs/common';
+import type { Request } from 'express';
 import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
@@ -121,7 +130,15 @@ export class UsersController {
     // }
   })
   @ApiBadRequestResponse({ description: 'Invalid Refresh Token' })
-  async refresh(@Body('refresh_token') refresh_token: string) {
+  // async refresh(@Body('refresh_token') refresh_token: string) {
+  //   return this.usersService.refresh(refresh_token);
+  // }
+  @Post('auth/refresh')
+  async refresh(@Req() req: Request, @Body('refresh_token') bodyToken?: string) {
+    const refresh_token = bodyToken || req.cookies?.refresh_token;
+    if (!refresh_token) {
+      throw new UnauthorizedException('No refresh token provided');
+    }
     return this.usersService.refresh(refresh_token);
   }
 }
