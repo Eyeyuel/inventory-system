@@ -1,3 +1,4 @@
+'use client';
 import * as React from 'react';
 
 import { SearchForm } from '@/components/search-form';
@@ -14,31 +15,49 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from '@/components/ui/sidebar';
-// import { getProfile } from '@/services/client/user';
+import { usePathname } from 'next/navigation';
 
-// This is sample data.
 const data = {
-  // versions: ['1.0.1', '1.1.0-alpha', '2.0.0-beta1'],
   navMain: [
     {
       title: 'GENERAL',
       url: '#',
       items: [
         {
-          title: 'Installation',
-          url: '#',
+          title: 'Dashboard',
+          url: '/dashboard',
         },
         {
-          title: 'Project Structure',
-          url: '#',
-          isActive: true,
+          title: 'Sales Order',
+          url: '/shipment',
+        },
+        {
+          title: 'Stock',
+          url: '/stock',
+        },
+        {
+          title: 'Locations',
+          url: '/locations',
+        },
+        {
+          title: 'Products',
+          url: '/products',
+        },
+        {
+          title: 'Purchase Order',
+          url: '/purchase',
+        },
+        {
+          title: 'Reports',
+          url: '/reports',
         },
       ],
     },
   ],
 };
 
-export async function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const pathname = usePathname();
   // try {
   //   const profileInfo = await getProfile();
   //   console.log(profileInfo);
@@ -52,19 +71,21 @@ export async function AppSidebar({ ...props }: React.ComponentProps<typeof Sideb
         <SearchForm />
       </SidebarHeader>
       <SidebarContent>
-        {/* We create a SidebarGroup for each parent. */}
-        {data.navMain.map((item) => (
-          <SidebarGroup key={item.title}>
-            <SidebarGroupLabel>{item.title}</SidebarGroupLabel>
+        {data.navMain.map((group) => (
+          <SidebarGroup key={group.title}>
+            <SidebarGroupLabel>{group.title}</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
-                {item.items.map((item) => (
-                  <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild isActive={item.isActive}>
-                      <a href={item.url}>{item.title}</a>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
+                {group.items.map((item) => {
+                  const isActive = pathname === item.url;
+                  return (
+                    <SidebarMenuItem key={item.title}>
+                      <SidebarMenuButton asChild isActive={isActive}>
+                        <a href={item.url}>{item.title}</a>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  );
+                })}
               </SidebarMenu>
             </SidebarGroupContent>
           </SidebarGroup>

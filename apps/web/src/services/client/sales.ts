@@ -9,7 +9,7 @@ export async function getSalesOrders(
   const response = await apiClient.get('/sales', {
     params,
   });
-  console.log('Fetched sales orders params:', params);
+  // console.log('Fetched sales orders params:', params);
   // console.log('Fetched sales orders data:', response.data); // Debug log
   return response.data;
 }

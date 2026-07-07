@@ -45,4 +45,8 @@ export class StockService {
   getCountStockMovements(userId: string) {
     return this.inventoryClient.send(STOCK_CMD.COUNT, { userId });
   }
+
+  getStockMovementsChartData(userId: string) {
+    return this.inventoryClient.send(STOCK_CMD.CHART_DATA, { userId });
+  }
 }

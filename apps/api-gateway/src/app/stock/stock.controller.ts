@@ -113,4 +113,13 @@ export class StockController {
   getCountStockMovements(@CurrentUser() user: { sub: string }) {
     return this.stockService.getCountStockMovements(user.sub);
   }
+
+  @Throttle({ [THROTTLE_PRESETS.stock.name]: THROTTLE_PRESETS.stock })
+  @Get('movements/chart-data')
+  @ApiOperation({ summary: 'Get chart data for stock movements' })
+  @ApiOkResponse({ description: 'Chart data retrieved successfully' })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  getStockMovementsChartData(@CurrentUser() user: { sub: string }) {
+    return this.stockService.getStockMovementsChartData(user.sub);
+  }
 }

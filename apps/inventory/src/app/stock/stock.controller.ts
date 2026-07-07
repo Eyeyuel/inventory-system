@@ -49,4 +49,9 @@ export class StockController {
   getCountStockMovements(@Payload() payload: { userId: string }) {
     return this.stockService.getCountStockMovements(payload.userId);
   }
+
+  @MessagePattern(STOCK_CMD.CHART_DATA)
+  getStockMovementsChartData(@Payload() payload: { userId: string }) {
+    return this.stockService.getStockMovementsChartData(payload.userId);
+  }
 }

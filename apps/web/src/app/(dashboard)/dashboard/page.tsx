@@ -14,6 +14,9 @@ const Dashboard = () => {
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ['dashboard-stats'],
     queryFn: getDashboard,
+    staleTime: Infinity,
+    placeholderData: (previousData) => previousData, // keeps old data on refetch
+    refetchOnWindowFocus: false, // disable refetch on window focus
   });
 
   // if (isLoading) return <DashboardCardsSkeleton />;
@@ -36,6 +39,7 @@ const Dashboard = () => {
         <ChartAreaInteractive />
       </div>
       <div className="@container/main">
+        <h1>some random text here</h1>
         <SalesTable />
         {/* <DataTable
           data={data}

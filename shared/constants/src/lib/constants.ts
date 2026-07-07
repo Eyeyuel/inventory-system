@@ -52,6 +52,7 @@ export const STOCK_CMD = {
   ADJUST: { cmd: 'adjust_stock' },
   FIND_MOVEMENTS: { cmd: 'find_movements' },
   COUNT: { cmd: 'count_stock_movements' },
+  CHART_DATA: { cmd: 'get_stock_movements_chart_data' },
 };
 
 export const PURCHASE_ORDER_CMD = {
