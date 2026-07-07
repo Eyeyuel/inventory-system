@@ -269,6 +269,19 @@ export class SalesOrderService {
     }
   }
 
+  async findDrafts(userId: string) {
+    try {
+      const salesOrdersDraftCount = await this.dataSource.getRepository(SalesOrder).count({
+        where: { user: userId, status: 'draft' },
+        // relations: ['items'],
+      });
+      if (salesOrdersDraftCount === 0)
+        throw new RpcException({ statusCode: 404, message: 'No draft sales orders found' });
+      return { count: salesOrdersDraftCount };
+    } catch (error) {
+      handleRpcException(error, 'Database error while getting sales orders');
+    }
+  }
   // async findAll(userId: string) {
   //   try {
   //     const salesOrders = await this.dataSource.getRepository(SalesOrder).find({

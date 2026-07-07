@@ -23,6 +23,11 @@ export class PurchaseOrderController {
     return this.purchaseOrderService.findOne(payload.id, payload.userId);
   }
 
+  @MessagePattern(PURCHASE_ORDER_CMD.FIND_DRAFTS)
+  findDrafts(@Payload() payload: { userId: string }) {
+    return this.purchaseOrderService.findDrafts(payload.userId);
+  }
+
   // @MessagePattern('updatePurchaseOrder')
   // update(@Payload() updatePurchaseOrderDto: UpdatePurchaseOrderDto) {
   //   return this.purchaseOrderService.update(updatePurchaseOrderDto.id, updatePurchaseOrderDto);

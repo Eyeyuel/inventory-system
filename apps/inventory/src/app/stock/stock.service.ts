@@ -837,4 +837,69 @@ export class StockService {
       await queryRunner.release();
     }
   }
+
+  async getCountStockMovements(userId: string) {
+    try {
+      const count = await this.dataSource
+        .getRepository(StockMovement)
+        .createQueryBuilder('sm')
+        .where('sm.user = :userId', { userId })
+        .getCount();
+
+      return { count };
+    } catch (error) {
+      handleRpcException(error, 'Database error while counting stock movements');
+    }
+  }
+  async getStockMovementsChartData(userId: string) {
+    try {
+      const rawData = await this.dataSource
+        .getRepository(StockMovement)
+        .createQueryBuilder('sm')
+        .select('DATE(sm.createdAt)::date', 'date')
+        .addSelect(
+          `SUM(CASE WHEN sm.type = '${StockMovementType.SHIP}' THEN 1 ELSE 0 END)`,
+          'shipCount',
+        )
+        .addSelect(
+          `SUM(CASE WHEN sm.type = '${StockMovementType.RECEIVE}' THEN 1 ELSE 0 END)`,
+          'receiveCount',
+        )
+        .where('sm.user = :userId', { userId })
+        .groupBy('DATE(sm.createdAt)')
+        .orderBy('DATE(sm.createdAt)', 'ASC')
+        .getRawMany();
+
+      return rawData.map((row) => ({
+        date:
+          row.date instanceof Date
+            ? row.date.toISOString().slice(0, 10)
+            : String(row.date).slice(0, 10),
+        shipCount: parseInt(row.shipCount, 10) || 0,
+        receiveCount: parseInt(row.receiveCount, 10) || 0,
+      }));
+    } catch (error) {
+      handleRpcException(error, 'Database error while fetching chart data');
+    }
+  }
+  // async getStockMovementsChartData(userId: string) {
+  //   try {
+  //     const data = await this.dataSource
+  //       .getRepository(StockMovement)
+  //       .createQueryBuilder('sm')
+  //       .select("DATE_TRUNC('day', sm.createdAt)", 'date')
+  //       .addSelect('SUM(sm.quantityChange)', 'totalQuantityChange')
+  //       .where('sm.user = :userId', { userId })
+  //       .groupBy("DATE_TRUNC('day', sm.createdAt)")
+  //       .orderBy("DATE_TRUNC('day', sm.createdAt)", 'ASC')
+  //       .getRawMany();
+
+  //     return data.map((item) => ({
+  //       date: item.date,
+  //       totalQuantityChange: parseInt(item.totalQuantityChange, 10),
+  //     }));
+  //   } catch (error) {
+  //     handleRpcException(error, 'Database error while fetching chart data');
+  //   }
+  // }
 }

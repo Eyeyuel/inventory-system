@@ -81,7 +81,7 @@ export class AuthService {
     );
 
     // await this.mailService.sendVerificationEmail(user.email, token);
-    return `http://localhost:3000/reset-password?token=${token}`;
+    return { verification_token: token };
   }
 
   // if a user signs up and does not verify emain immidiately they can request verfication again with this method
@@ -116,10 +116,10 @@ export class AuthService {
 
       // Security: Always return same message even if user not found
       // to prevent email enumeration.
-      if (!user) {
-        // Do not throw error; simply return success without sending email.
-        return { message: 'If that email exists, a reset link has been sent.' };
-      }
+      // if (!user) {
+      //   // Do not throw error; simply return success without sending email.
+      //   return { message: 'If that email exists, a reset link has been sent.' };
+      // }
 
       const token = await this.tokenService.createToken(
         user.id,
@@ -130,7 +130,7 @@ export class AuthService {
 
       // await this.mailService.sendResetPasswordEmail(user.email, token);
 
-      return `http://localhost:3000/reset-password?token=${token}`;
+      return { passwordResetToken: token };
     } catch (error) {
       handleRpcException(error, 'Database error while processing forgot password');
     }
@@ -195,7 +195,7 @@ export class AuthService {
       // return { sub, email };
       const newAccesstoken = this.generateToken({ id: sub, email });
       const newRefreshToken = this.generateRefreshToken({ id: sub, email });
-      return { access_Token: newAccesstoken, refresh_token: newRefreshToken };
+      return { access_token: newAccesstoken, refresh_token: newRefreshToken };
     } catch (error) {
       handleRpcException(error, 'Invalid or expired refresh token');
     }

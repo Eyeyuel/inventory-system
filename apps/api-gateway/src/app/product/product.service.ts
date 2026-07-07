@@ -27,4 +27,8 @@ export class ProductService {
   remove(id: string, userId: string) {
     return this.productClient.send(PRODUCT_CMD.DELETE, { id, userId });
   }
+
+  getTotalProducts(userId: string) {
+    return this.productClient.send(PRODUCT_CMD.TOTAL, { userId });
+  }
 }

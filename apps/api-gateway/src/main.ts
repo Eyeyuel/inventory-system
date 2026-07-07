@@ -4,6 +4,7 @@ import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app/app.module';
 import { RpcExceptionFilter } from './app/common/filters/rpc-exception.filters';
+import cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -18,11 +19,17 @@ async function bootstrap() {
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix);
   app.useGlobalFilters(new RpcExceptionFilter());
-  // app.use(cookieParser());
+  app.use(cookieParser());
 
   const configService = app.get(ConfigService);
+
+  app.enableCors({
+    origin: configService.get('FRONTEND_URL'), // e.g., "https://yourdomain.com"
+    credentials: true,
+  });
+
   // const port = process.env.PORT || 3001;
-  const port = configService.get('PORT') || 3000;
+  const port = configService.get('PORT') || 4000;
 
   // swagger
   const config = new DocumentBuilder()

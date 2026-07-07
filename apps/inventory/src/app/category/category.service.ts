@@ -103,11 +103,11 @@ export class CategoryService {
     }
   }
 
-  async findOne(id: string, userId: string) {
+  async findOne(id: string, userId: string): Promise<Category> {
     try {
       const key = `category:${userId}:${id}`;
 
-      const cached = await this.cache.get(key);
+      const cached: Category | undefined = await this.cache.get(key);
       if (cached) return cached;
 
       const category = await this.categoryRepository.findOne({

@@ -1,14 +1,20 @@
+'use client';
 import { LogoIcon } from '@/components/logo';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { signup, SignupState } from '@/services/client/user';
 import Link from 'next/link';
+import { useActionState } from 'react';
+import { Alert, AlertDescription } from './ui/alert';
 
 export default function SignUp() {
+  const initialState: SignupState = { message: '', errors: {}, values: undefined };
+  const [state, formAction, pending] = useActionState(signup, initialState);
   return (
     <section className="flex min-h-screen bg-zinc-50 px-4 dark:bg-transparent">
       <form
-        action=""
+        action={formAction}
         className="bg-muted m-auto h-fit w-full max-w-sm overflow-hidden rounded-[calc(var(--radius)+.125rem)] border shadow-md shadow-zinc-950/5 dark:[--color-muted:var(--color-zinc-900)]"
       >
         <div className="bg-card -m-px rounded-[calc(var(--radius)+.125rem)] border p-8 pb-6">
@@ -23,24 +29,43 @@ export default function SignUp() {
           <div className="mt-6 space-y-6">
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-2">
-                <Label htmlFor="firstname" className="block text-sm">
+                <Label htmlFor="first_name" className="block text-sm">
                   Firstname
                 </Label>
-                <Input type="text" required name="firstname" id="firstname" />
+                <Input
+                  type="text"
+                  name="first_name"
+                  id="first_name"
+                  defaultValue={state?.values?.first_name}
+                />
+                {state?.errors?.first_name && (
+                  <p className="text-sm text-red-500">{state.errors.first_name[0]}</p>
+                )}
               </div>
               <div className="space-y-2">
-                <Label htmlFor="lastname" className="block text-sm">
+                <Label htmlFor="last_name" className="block text-sm">
                   Lastname
                 </Label>
-                <Input type="text" required name="lastname" id="lastname" />
+                <Input
+                  type="text"
+                  name="last_name"
+                  id="last_name"
+                  defaultValue={state?.values?.last_name}
+                />
+                {state?.errors?.last_name && (
+                  <p className="text-sm text-red-500">{state.errors.last_name[0]}</p>
+                )}
               </div>
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="email" className="block text-sm">
-                Username
+                Email
               </Label>
-              <Input type="email" required name="email" id="email" />
+              <Input type="email" name="email" id="email" defaultValue={state?.values?.email} />
+              {state?.errors?.email && (
+                <p className="text-sm text-red-500">{state.errors.email[0]}</p>
+              )}
             </div>
 
             <div className="space-y-0.5">
@@ -56,14 +81,21 @@ export default function SignUp() {
               </div>
               <Input
                 type="password"
-                required
-                name="pwd"
-                id="pwd"
+                name="password"
+                id="password"
                 className="input sz-md variant-mixed"
+                defaultValue={state?.values?.password}
               />
+              {state?.errors?.password && (
+                <p className="text-sm text-red-500">{state.errors.password[0]}</p>
+              )}
             </div>
-
-            <Button className="w-full">Sign In</Button>
+            {state?.message && !pending && (
+              <Alert variant="destructive">
+                <AlertDescription>{state.message}</AlertDescription>
+              </Alert>
+            )}
+            <Button className="w-full">Sign up</Button>
           </div>
 
           <div className="my-6 grid grid-cols-[1fr_auto_1fr] items-center gap-3">
@@ -72,7 +104,7 @@ export default function SignUp() {
             <hr className="border-dashed" />
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 gap-3">
             <Button type="button" variant="outline">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -99,7 +131,7 @@ export default function SignUp() {
               </svg>
               <span>Google</span>
             </Button>
-            <Button type="button" variant="outline">
+            {/* <Button type="button" variant="outline">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="1em"
@@ -112,7 +144,7 @@ export default function SignUp() {
                 <path fill="#fbbc09" d="M256 256.002H134.335V134.336H256z"></path>
               </svg>
               <span>Microsoft</span>
-            </Button>
+            </Button> */}
           </div>
         </div>
 
