@@ -3,8 +3,8 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion";
-import { cn } from "@/lib/utils";
+} from '@/components/ui/accordion';
+import { cn } from '@/lib/utils';
 
 interface FaqItem {
   id: string;
@@ -20,69 +20,65 @@ interface Faq1Props {
 }
 
 const Faq1 = ({
-  heading = "Frequently asked questions",
+  heading = 'Frequently asked questions',
   items = [
     {
-      id: "faq-1",
-      question: "What is a FAQ?",
+      id: 'faq-1',
+      question: 'What is multi‑tenant inventory management?',
       answer:
-        "A FAQ is a list of frequently asked questions and answers on a particular topic.",
+        "It's a system that lets multiple companies manage their own inventory, orders, and suppliers within a single platform, each with isolated data and settings.",
     },
     {
-      id: "faq-2",
-      question: "What is the purpose of a FAQ?",
+      id: 'faq-2',
+      question: 'How does tenant isolation work?',
       answer:
-        "The purpose of a FAQ is to provide answers to common questions and help users find the information they need quickly and easily.",
+        "Every company gets its own secure workspace. Data, users, and configurations are completely separated, so no tenant can see another's information.",
     },
     {
-      id: "faq-3",
-      question: "How do I create a FAQ?",
+      id: 'faq-3',
+      question: 'Can I switch between companies easily?',
       answer:
-        "To create a FAQ, you need to compile a list of common questions and answers on a particular topic and organize them in a clear and easy-to-navigate format.",
+        'Yes, you can toggle between tenants from the sidebar or profile menu without logging out — ideal for accountants or managers overseeing multiple businesses.',
     },
     {
-      id: "faq-4",
-      question: "What are the benefits of a FAQ?",
+      id: 'faq-4',
+      question: 'What features are included?',
       answer:
-        "The benefits of a FAQ include providing quick and easy access to information, reducing the number of support requests, and improving the overall user experience.",
+        'Stock tracking, order management, supplier databases, barcode scanning, low‑stock alerts, and real‑time reports. Different plans offer different limits on SKUs and companies.',
     },
     {
-      id: "faq-5",
-      question: "How should I organize my FAQ?",
+      id: 'faq-5',
+      question: 'Is my data safe?',
       answer:
-        "You should organize your FAQ in a logical manner, grouping related questions together and ordering them from most basic to more advanced topics.",
+        'Absolutely. We use encryption at rest and in transit, role‑based access control, and regular backups. Enterprise plans can also bring their own SSO.',
     },
     {
-      id: "faq-6",
-      question: "How long should FAQ answers be?",
+      id: 'faq-6',
+      question: 'How do I get started?',
       answer:
-        "FAQ answers should be concise and to the point, typically a few sentences or a short paragraph is sufficient for most questions.",
+        'Sign up for a free trial. You can add your first company in minutes. We provide onboarding guides and a sample dataset to help you explore the platform.',
     },
     {
-      id: "faq-7",
-      question: "Should I include links in my FAQ?",
+      id: 'faq-7',
+      question: 'Can I upgrade or downgrade my plan later?',
       answer:
-        "Yes, including links to more detailed information or related resources can be very helpful for users who want to learn more about a particular topic.",
+        'Yes, you can change plans at any time. Upgrades take effect immediately; downgrades apply at the end of your billing cycle. No penalties or hidden fees.',
     },
   ],
   className,
 }: Faq1Props) => {
   return (
-    <section className={cn("py-32", className)}>
+    <section className={cn('py-32', className)}>
       <div className="container">
         <div className="mx-auto max-w-3xl">
-          <h1 className="mb-4 text-3xl font-semibold md:mb-11 md:text-4xl">
-            {heading}
-          </h1>
+          <h1 className="mb-4 text-3xl font-semibold md:mb-11 md:text-4xl">{heading}</h1>
           <Accordion type="single" collapsible>
             {items.map((item, index) => (
               <AccordionItem key={index} value={`item-${index}`}>
                 <AccordionTrigger className="font-semibold hover:no-underline">
                   {item.question}
                 </AccordionTrigger>
-                <AccordionContent className="text-muted-foreground">
-                  {item.answer}
-                </AccordionContent>
+                <AccordionContent className="text-muted-foreground">{item.answer}</AccordionContent>
               </AccordionItem>
             ))}
           </Accordion>

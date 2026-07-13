@@ -68,12 +68,12 @@ const Hero7 = ({
     dark:bg-[radial-gradient(#1f2937_1px,transparent_1px)]
     bg-size-[20px_20px]"
       /> */}
-      <div
+      {/* <div
         className="absolute inset-0 -z-10 h-full w-full bg-background
   bg-[linear-gradient(to_right,#e5e7eb_1px,transparent_1px),linear-gradient(to_bottom,#e5e7eb_1px,transparent_1px)]
   dark:bg-[linear-gradient(to_right,#1f2937_1px,transparent_1px),linear-gradient(to_bottom,#1f2937_1px,transparent_1px)]
   bg-size-[4rem_4rem]"
-      />
+      /> */}
 
       <div className="container text-center">
         <div className="mx-auto flex max-w-5xl flex-col gap-6">
