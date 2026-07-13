@@ -12,64 +12,28 @@ const LINKS = [
   {
     title: 'Product',
     items: [
-      {
-        title: 'Overview',
-        href: '#',
-      },
-      {
-        title: 'Features',
-        href: '#',
-      },
-      {
-        title: 'Solutions',
-        href: '#',
-      },
-      {
-        title: 'Tutorials',
-        href: '#',
-      },
+      { title: 'Features', href: '#' },
+      { title: 'Pricing', href: '#' },
+      { title: 'Integrations', href: '#' },
+      { title: 'API', href: '#' },
     ],
   },
   {
     title: 'Company',
     items: [
-      {
-        title: 'About us',
-        href: '#',
-      },
-      {
-        title: 'Careers',
-        href: '#',
-      },
-      {
-        title: 'Press',
-        href: '#',
-      },
-      {
-        title: 'News',
-        href: '#',
-      },
+      { title: 'About Us', href: '#' },
+      { title: 'Careers', href: '#' },
+      { title: 'Partners', href: '#' },
+      { title: 'Contact', href: '#' },
     ],
   },
   {
-    title: 'Resource',
+    title: 'Resources',
     items: [
-      {
-        title: 'Blog',
-        href: '#',
-      },
-      {
-        title: 'Newsletter',
-        href: '#',
-      },
-      {
-        title: 'Events',
-        href: '#',
-      },
-      {
-        title: 'Help center',
-        href: '#',
-      },
+      { title: 'Help Center', href: '#' },
+      { title: 'Documentation', href: '#' },
+      { title: 'Blog', href: '#' },
+      { title: 'System Status', href: '#' },
     ],
   },
 ];
@@ -81,7 +45,7 @@ export function FooterWithSocialLinks() {
     <footer className="relative w-full">
       <div className="mx-auto w-full max-w-7xl px-8">
         <div className="grid grid-cols-1 justify-between gap-4 md:grid-cols-2">
-          <h6 className="mb-4 text-lg font-semibold">Creative Tim UI</h6>
+          <h6 className="mb-4 text-lg font-semibold">InvenTrak</h6>
           <div className="grid grid-cols-3 justify-between gap-x-6 gap-y-4">
             {LINKS.map(({ title, items }) => (
               <ul key={title}>
@@ -100,8 +64,8 @@ export function FooterWithSocialLinks() {
         <div className="border-border mt-10 flex w-full flex-col items-center justify-center gap-4 border-t py-4 md:flex-row md:justify-between">
           <p className="text-center text-sm">
             &copy; {YEAR}{' '}
-            <a href="https://www.creative-tim.com/" className="hover:text-primary">
-              Creative Tim UI
+            <a href="#" className="hover:text-primary">
+              InvenTrak
             </a>
             . All Rights Reserved.
           </p>
