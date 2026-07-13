@@ -62,6 +62,15 @@ const Hero7 = ({
   return (
     <section className={cn('py-32', className)}>
       {/* Pattern overlay */}
+      <div
+        className="absolute inset-0 -z-10 h-full w-full bg-background"
+        style={{
+          backgroundImage: 'url("/heroBackground.svg")',
+          backgroundSize: 'cover', // or 'auto', 'contain', etc.
+          backgroundRepeat: 'no-repeat',
+          backgroundPosition: 'center',
+        }}
+      />
       {/* <div
         className="absolute inset-0 -z-10 h-full w-full bg-background
     bg-[radial-gradient(#e5e7eb_1px,transparent_1px)]
@@ -74,7 +83,6 @@ const Hero7 = ({
   dark:bg-[linear-gradient(to_right,#1f2937_1px,transparent_1px),linear-gradient(to_bottom,#1f2937_1px,transparent_1px)]
   bg-size-[4rem_4rem]"
       /> */}
-
       <div className="container text-center">
         <div className="mx-auto flex max-w-5xl flex-col gap-6">
           <h1 className="text-3xl font-semibold lg:text-6xl">{heading}</h1>
